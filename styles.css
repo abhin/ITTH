@@ -70,3 +70,8 @@ form input[type="submit"] {
     border: none;
     cursor: pointer;
 }
+
+a:hover {
+    text-decoration: none;
+    color:#4CAF50;
+}
