@@ -1,1 +1,1 @@
-# it-hub
+# IITH
