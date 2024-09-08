@@ -1,1 +1,1 @@
-# IITH
+# ITTH
