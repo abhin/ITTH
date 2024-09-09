@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/* Global Styles */
+body {
+    font-family: "Roboto", Arial, sans-serif;
+    background-color: #f9f3ee;
+    margin: 0;
+    padding: 20px;
+    font-size: 12px;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.products h2.heading {
+    font-size: 24px;
+    margin-bottom: 20px;
+    padding-left: 20px;
+}
+
+/* Product Section */
+.products {
+    width: 65%;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.product-card {
+    background-color: none;
+    border-radius: 10px;
+    position: relative;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-card p {
+    font-size: 16px;
+    color: #e67300;
+    font-weight: bold;
+}
+
+.product-card .img-container, 
+.product-card img {
+    width: 100%;
+    border-radius: 10px;
+    height: 300px;
+    object-fit: cover;
+}
+
+.product-card .img-container {
+    border: 3px solid #f9f3ee;
+}
+
+.product-info h4, 
+.product-info .product-name, 
+.product-info p {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 5px;
+}
+
+.product-info {
+    margin: 0;
+    margin-top: 30px;
+    text-align: left;
+}
+
+.product-info p.product-name {
+    font-size: 18px;
+    margin: 10px 0 5px;
+    font-size: 14px;
+    font-weight: bold;
+    color: black;
+}
+
+.product-info h4 {
+    color: grey;
+}
+
+.img-container:hover {
+    border: 3px solid #d14d33;
+    margin: 0;
+}
+
+.add-to-cart {
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px; /* Retaining the button's rounded shape */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: absolute;
+    top:302px;
+    left: 76px;
+    width: 150px;
+    font-weight: bold;
+    border: 1px solid hsl(0, 0%, 80%);
+}
+
+/* Add icon before the 'Add to Cart' text */
+.add-to-cart::before {
+    content: "\f217"; /* Example: Unicode for FontAwesome cart icon */
+    font-family: 'FontAwesome'; /* Make sure you include the relevant icon font library */
+    margin-right: 5px; /* Space between icon and text */
+    transition: opacity 0.3s ease; /* Smooth transition for the hover effect */
+    color: #d14d33;
+}
+
+.add-to-cart:hover {
+    background-color: #d14d33; /* Button hover effect */
+    color: white;
+}
+
+/* Remove the icon on hover */
+.add-to-cart:hover::before {
+    content: "\f068";
+    font-family: 'FontAwesome';
+    color: white;
+}
+
+/* Remove the icon on hover */
+.add-to-cart:hover::after {
+    content: "\2b";
+    font-family: 'FontAwesome';
+    color: white;
+    margin-left: 5px;
+}
+
+/* Cart Section */
+.cart {
+    width: 30%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cart h2 {
+    font-size: 22px;
+    color: #d14d33;
+    margin-bottom: 35px;
+}
+
+.cart ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.cart ul li {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 10px;
+    position: relative;
+    border-bottom: 1px solid hsl(0, 0%, 90%);
+    font-weight: bold;
+}
+
+.cart ul li p {
+    font-weight: normal;
+    font-size: 14px;
+    color: hsl(0, 0%, 50%);
+}
+
+.cart ul li p span {
+    color: #d14d33;
+    margin-right: 10px;
+}
+
+.cart ul li span.close {
+    color: hsl(0, 0%, 80%);
+    font-family: 'FontAwesome';
+    vertical-align:middle;
+    position: absolute;
+    display: inline;
+    left: 94%;
+    top: 30%;
+}
+
+.cart .total {
+    padding-top: 10px;
+}
+
+.total p {
+    font-weight: normal;
+    display: flex;
+    justify-content: space-between;
+}
+
+.total p span{
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.confirm-order {
+    background-color: #f15b3a;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 30px; /* Rounded button shape */
+    width: 100%;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.confirm-order:hover {
+    background-color: #d14d33; /* Button hover effect */
+}
+
+.total p.carbon-neutral {
+    margin-top: 40px;
+    font-size: 14px;
+    text-align: center;
+    display: block;
+    font-weight: normal;
+    background-color: hsl(0, 0%, 95%);
+    padding: 20px;
+    border-radius: 10px;
+}
