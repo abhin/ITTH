@@ -1,0 +1,918 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: none;
+}
+
+body {
+  background-color: rgba(201, 208, 209, 0.5);
+}
+
+/* menu start  */
+.header {
+  background-color: rgb(20, 20, 18);
+  height: 110px;
+  display: flex;
+  width: 100%;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 1;
+  justify-content: space-between;
+}
+
+.logo {
+  width: 45%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo img {
+  width: 60px;
+  height: 60px;
+  margin-right: 10px;
+  border-radius: 50px;
+}
+
+.logo .logo-text {
+  font-family: 'Pirata One', cursive;
+  font-size: 40px;
+  font-weight: bold;
+  color: whitesmoke;
+}
+
+.navbar {
+  width: 55%;
+}
+
+
+.navbar ul {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 100px;
+  list-style: none;
+}
+
+.navbar ul li {
+  width: 100px;
+  height: 25px;
+  clear: both;
+}
+
+.navbar ul li a {
+  color: whitesmoke;
+  display: inline-block;
+  width: 100%;
+  height: 35px;
+  text-align: center;
+  font-size: 30px;
+  font-family: "Pirata One", cursive;
+  text-decoration: none;
+  padding: 10px;
+}
+
+.navbar ul li a.active {
+  color: rgb(192, 98, 31);
+  background-color: rgb(184, 125, 14, 0.3);
+  border-radius: 25px;
+  padding: 10px;
+}
+
+.navbar ul li a:hover:not(.active) {
+  color: rgb(192, 98, 31);
+  background-color: rgb(184, 125, 14, 0.3);
+  border-radius: 25px;
+}
+
+/* menu end  */
+
+/* first section start  */
+.welcome-section {
+  background-color: rgb(61, 54, 48);
+  height: 900px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  position: relative;
+  top: 80px;
+}
+
+.welcome-section .light-grid {
+  display: flex;
+  justify-content: space-evenly;
+  height: 200px;
+  width: 85%;
+  margin-left: 80px;
+}
+
+.table-set {
+  height: 400px;
+}
+
+.table-set img {
+  margin-left: 5%;
+}
+
+.welcome-section .welcome-content {
+  height: 350px;
+}
+
+.welcome-content h3 {
+  font-family: "Pacifico", cursive;
+  color: whitesmoke;
+  font-size: 40px;
+  text-align: center;
+  padding-left: 5px;
+}
+
+#p1 {
+  font-family: "Times New Roman", Times, serif;
+  text-transform: uppercase;
+  color: rgba(58, 28, 7, 0.5);
+  text-shadow: 2px 2px rgb(226, 127, 57);
+  font-size: 55px;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 4px;
+  padding-top: 8px;
+}
+
+#p2 {
+  text-align: center;
+  color: rgb(151, 146, 146);
+  padding-top: 10px;
+}
+
+.welcome-content a {
+  color: rgb(192, 98, 31);
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  left: 45%;
+  top: 20px;
+  height: 40px;
+  width: 170px;
+  text-align: center;
+  border: 1px solid rgb(150, 132, 119);
+  border-radius: 12px;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-family: monospace;
+  font-size: 20px;
+  font-weight: lighter;
+  letter-spacing: -1px;
+  background-image: linear-gradient(rgb(56, 28, 8),
+      rgb(83, 36, 3),
+      rgb(24, 12, 3, 0.5));
+  outline: 2px solid rgb(58, 26, 4);
+}
+
+/* first section end  */
+
+/* second section start  */
+.about-section {
+  background-color: rgb(165, 172, 173, 0.5);
+  height: 550px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-section .about-content p {
+  color: black;
+}
+
+.about-section div {
+  margin-top: 100px;
+}
+
+.about-content {
+  width: 50%;
+  height: 200px;
+  padding: 20px 25px;
+}
+
+.about-content h2 {
+  color: rgb(170, 108, 26);
+  font-style: italic;
+  font-family: 'Lobster', cursive;
+  font-size: 30px;
+}
+
+.about-content h1 {
+  font-family: monospace;
+  font-weight: lighter;
+  font-size: 2em;
+}
+
+.about-content h3,
+p,
+h1 {
+  padding-top: 10px;
+}
+
+.about-section .about-image {
+  width: 28%;
+  height: 200px;
+  margin-bottom: 50px;
+}
+
+.about-section .about-image img {
+  box-shadow: 0px 15px 15px 2px rgb(83, 81, 81);
+  float: right;
+  border: 10px solid whitesmoke;
+  border-radius: 100px;
+  width: 70px;
+  height: 70px;
+  ;
+}
+
+.about-section .about-content a {
+  color: rgb(192, 98, 31);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 40px;
+  width: 170px;
+  text-align: center;
+  border: 1px solid rgb(150, 132, 119);
+  border-radius: 10px;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-family: monospace;
+  font-size: 20px;
+  font-weight: lighter;
+  letter-spacing: -1px;
+  background-image: linear-gradient(rgb(56, 28, 8),
+      rgb(83, 36, 3),
+      rgb(24, 12, 3, 0.5));
+}
+
+/* second section end  */
+
+/* item section start  */
+.popular-items {
+  height: 550px;
+  width: 80%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-left: 130px;
+  margin-bottom: 75px; 
+}
+
+.popular-items p {
+  color: black;
+}
+
+.section-header {
+  height: 80px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+}
+
+.section-header h2 {
+  color: rgb(170, 108, 26);
+  font-style: italic;
+  font-family: 'Lobster', cursive;
+  font-size: 30px;
+  padding-left: 5px;
+}
+
+.section-header .item-line {
+  width: 70%;
+  height: 40px;
+  border-bottom: 0.5px solid rgb(185, 117, 27);
+  margin-bottom: 15px;
+  margin-left: 20px;
+}
+
+.section-header .popular-item-caption {
+  width: 18%;
+  height: 30px;
+}
+
+.popular-items .items-grid {
+  height: 450px;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.popular-items .items-grid .item {
+  height: 450px;
+  width: 25%;
+  background-color: rgb(255, 254, 251);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.item h3 {
+  text-align: center;
+  color: darkgray;
+  font-family: "Lobster", cursive;
+  margin: 15px 30px;
+  margin-top: 40px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid darkgray;
+}
+
+.item>span {
+  margin: 15px 30px;
+}
+
+.item span hr {
+  color: darkgray;
+}
+
+.item p {
+  padding: 10px 60px;
+}
+
+.item div {
+  background-color: rgb(61, 54, 48, 0.9);
+
+  height: 120px;
+  width: 90px;
+  margin-top: 30px;
+  margin-left: 95px;
+  display: flex;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.item a {
+  color: rgb(151, 163, 163);
+  text-align: center;
+  font-size: 25px;
+  font-family: "Lobster", cursive;
+  text-decoration: none;
+  border: 2px solid rgb(194, 187, 187);
+  display: inline-block;
+  height: 70px;
+  width: 60px;
+  border-radius: 50%;
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  margin: 10px 10px;
+}
+
+/* populat item end  */
+
+/* today special caption start
+ */
+
+.today-special {
+  margin-top: 80px;
+  margin-left: 195px;
+  height: 60px;
+  width: 70%;
+  margin-bottom: 500px; 
+}
+
+.section-heading h2 {
+  color: rgb(170, 108, 26);
+  font-style: italic;
+  font-family: "Lobster", cursive;
+}
+
+.section-heading hr {
+  width: 80%;
+  margin-left: 180px;
+  margin-bottom: 50px;
+  position: relative;
+  bottom: 10px;
+  border-top: 1px solid rgb(214, 127, 95);
+}
+
+/* today special end  */
+
+/* today sepcial item start  */
+
+.special-grid {
+  height: 390px;
+  margin-top: 70px;
+}
+
+/* left part  */
+.special-left {
+  height: 375px;
+  width: 55%;
+  float: left;
+  background-image: url(https://ashish1322.github.io/SimpleteaCafe_website_HTML_Css/img/special-1.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  border: 8px solid white;
+  border-bottom: 10px solid white;
+}
+
+.special-left h2 {
+  height: 80px;
+  width: 100%;
+  background-color: rgba(5, 5, 5, 0.8);
+  position: absolute;
+  bottom: 0px;
+}
+
+.special-left p,
+p {
+  padding: 5px 10px;
+  color: aliceblue;
+}
+
+.special-right {
+  float: right;
+  width: 38%;
+  height: 350px;
+  margin-right: 20px;
+}
+
+/* today sepcial item  left part end  */
+
+/* today special item right start  */
+.special-right .special-item-one {
+  width: 100%;
+  height: 200px;
+  background-image: url(https://ashish1322.github.io/SimpleteaCafe_website_HTML_Css/img/special-2.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  border: 8px solid white;
+  border-bottom: 10px solid white;
+}
+
+.special-right .special-item-one .description {
+  position: absolute;
+  bottom: 0px;
+  height: 90px;
+  width: 100%;
+  background-color: rgba(5, 5, 5, 0.8);
+}
+
+.description h2,
+.description p {
+  color: white;
+  padding: 5px 12px;
+}
+
+.special-right .special-item-two {
+  width: 45%;
+  height: 150px;
+  background-image: url(https://ashish1322.github.io/SimpleteaCafe_website_HTML_Css/img/special-3.jpg);
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  float: left;
+  position: relative;
+  top: 10px;
+  border: 6px solid white;
+  border-bottom: 10px solid white;
+}
+
+.special-right .special-item-two .description {
+  position: absolute;
+  bottom: 0px;
+  background-color: rgba(5, 5, 5, 0.8);
+  height: 42px;
+  width: 100%;
+}
+
+.special-right .special-item-three {
+  float: right;
+  width: 45%;
+  height: 150px;
+  background-image: url(https://ashish1322.github.io/SimpleteaCafe_website_HTML_Css/img/special-4.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  top: 10px;
+  left: 14px;
+  border: 8px solid white;
+  border-bottom: 10px solid white;
+}
+
+.special-right .special-item-three .description {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  height: 42px;
+  background-color: rgba(5, 5, 5, 0.8);
+}
+
+/* today special right end 
+ */
+/* today special portion end 
+  */
+
+/* menu description start  */
+.daily-menu {
+  margin-left: 185px;
+  width: 72%;
+  height: 350px;
+  position: relative;
+}
+
+.menu-img {
+  width: 25%;
+  height: 320px;
+  float: left;
+  margin-top: 10px;
+}
+
+.menu-description {
+  float: right;
+  height: 300px;
+  width: 65%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.menu-description p {
+  color: black;
+}
+
+.menu-description ol {
+  margin-left: 50px;
+}
+
+.menu-description div.btn {
+  height: 45px;
+  width: 170px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  background-color: rgb(77, 40, 13);
+}
+
+.menu-description div.btn a {
+  border: 1px solid rgb(209, 160, 95);
+  border-radius: 12px;
+  text-decoration: none;
+  color: rgb(172, 113, 37);
+  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 15px;
+  width: 92%;
+  padding-bottom: 10px;
+  margin: 10px;
+  font-family: monospace;
+  padding-top: 10px;
+}
+
+.menu-description div a:hover {
+  color: whitesmoke;
+}
+
+/* menu portio end  */
+
+/* footer-grid start  */
+.footer-grid {
+  height: 360px;
+  width: 100%;
+  background-color: rgb(54, 52, 50);
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 115px;
+}
+
+.footer-col {
+  height: 280px;
+  width: 15%;
+  margin-left: 72px;
+}
+
+.footer-col h2 {
+  font-size: 25px;
+  color: whitesmoke;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.footer-col ul li {
+  padding-top: 20px;
+  list-style: none;
+}
+
+.footer-col ul li a {
+  color: whitesmoke;
+  text-decoration: none;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bolder;
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+.footer-col a:hover {
+  color: rgb(151, 72, 16);
+}
+
+.footer-second {
+  width: 35%;
+  height: 280px;
+}
+
+.footer-third {
+  width: 24%;
+  height: 280px;
+}
+
+.footer-third h2 {
+  color: whitesmoke;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.footer-third div {
+  margin-top: 15px;
+}
+
+.footer-third .fa {
+  color: whitesmoke;
+  height: 30px;
+  width: 40px;
+  background-color: rgb(136, 132, 132);
+  margin-left: 5px;
+  padding-top: 5px;
+}
+
+.footer-third a {
+  text-align: center;
+}
+
+.footer-third .fa:hover {
+  background-color: rgb(202, 124, 45);
+}
+
+/* footer end  */
+
+/* copyright start 
+ */
+
+.copyright {
+  margin-top: 30px;
+  height: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.copyright p {
+  color: black;
+  font-size: 12px;
+  font-family: monospace;
+}
+
+/* footer end  */
+
+/* INDEX PAGE END  */
+
+/* CONTACT PAGE START  */
+.contact-portion {
+  height: 400px;
+  width: 70%;
+  border: 3px solid rgb(20, 19, 19, 0.2);
+  margin-top: 400px;
+  margin-left: 80px;
+  background-color: rgba(177, 169, 169, 0.3);
+  margin-bottom: 20px;
+}
+
+.contact-portion h3 {
+  font-size: 20px;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.contact-portion form input {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  margin-left: 20px;
+  width: 60%;
+  height: 45px;
+  outline: none;
+  border-radius: 15px;
+  border: 1px solid rgb(189, 110, 53);
+}
+
+.contact-portion form textarea {
+  margin-top: 20px;
+  border: 1px solid rgb(189, 110, 53);
+  outline: none;
+  margin-left: 20px;
+}
+
+.contact-portion .btn {
+  height: 40px;
+  width: 150px;
+  border: 1px solid green;
+  margin-left: 30px;
+  margin-top: 25px;
+  border-radius: 10px;
+  background-color: rgb(29, 14, 3);
+}
+
+.contact-portion button {
+  height: 30px;
+  background-color: transparent;
+  width: 95%;
+  border: 1px solid rgb(170, 93, 39);
+  margin: 5px;
+  border-radius: 10px;
+  color: rgb(218, 137, 79);
+}
+
+.contact-portion button:hover,
+.btn:hover {
+  cursor: pointer;
+  color: whitesmoke;
+}
+
+input:focus,
+textarea:focus {
+  box-shadow: 0 0 10px rgba(81, 203, 238, 1);
+  padding: 3px 0px 3px 3px;
+  margin: 5px 1px 3px 0px;
+  border: 2px solid rgba(81, 203, 238, 1);
+}
+
+/* ___________________________________________________________CONTATCT PAGE END____________________________________________________  */
+
+/* ___________________________________________________________________TODAY SPECIAL START___________________________________ */
+
+/* popular item second one in today special portion start */
+.popular-item-two {
+  margin-top: 30px;
+}
+
+/*______________________ TODAY SPECIAL END CUX IT HAD HEADER AND FOOTER AND ONE EXTREA MENU FURTHER COPIED PORTION FROM INDEX PAFE _________________________________ */
+
+/* popular item second one in today special portion end */
+
+/* ________________________________MENU PAGE START _____________________________________ */
+
+/* menu caption  start  */
+.menu-caption {
+  height: 50px;
+  width: 75%;
+  margin-top: 100px;
+  margin-left: 150px;
+}
+
+.menu-caption h3 {
+  color: rgb(138, 72, 24);
+  font-family: "Lobster", cursive;
+  font-size: 28px;
+  font-style: italic;
+}
+
+.menu-caption hr {
+  border-top: 1px solid rgb(194, 108, 46);
+  width: 80%;
+  margin-left: 170px;
+  margin-top: -12px;
+}
+
+/* caption end  */
+
+/* menu list start  */
+.menu-list {
+  height: 1200px;
+  width: 78%;
+  margin-top: 30px;
+  margin-left: 125px;
+}
+
+.menu-list .menu-list-item {
+  height: 400px;
+  width: 26%;
+  float: left;
+  border-radius: 10px;
+
+  background-color: rgb(49, 25, 7);
+  position: relative;
+}
+
+.menu-list .menu-list-item ul {
+  height: 375px;
+  width: 85%;
+  border: 1px solid rgb(196, 121, 67);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+
+  position: absolute;
+  top: 10px;
+  left: 15px;
+
+  list-style: none;
+  border-radius: 15px;
+}
+
+.menu-list .menu-list-item ul li {
+  width: 90%;
+  height: 30px;
+  border-bottom: 1px solid rgb(157, 94, 48);
+  text-align: center;
+}
+
+.menu-list .menu-list-item ul li a {
+  text-decoration: none;
+  color: rgb(84, 64, 49);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  text-transform: uppercase;
+}
+
+.menu-list .menu-list-item ul li:hover a {
+  color: rgb(137, 111, 93);
+}
+
+.menu-list .menu-list-des {
+  height: 1200px;
+  width: 65%;
+  float: right;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.menu-list .menu-list-des .menu-list-des-right {
+  height: 170px;
+  background-color: white;
+  display: flex;
+  justify-content: space-around;
+}
+
+.menu-list .menu-list-des .menu-list-des-right .list-img {
+  width: 22%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 10px;
+}
+
+.menu-list .menu-list-des .menu-list-des-right .list-des {
+  width: 45%;
+
+  padding-top: 15px;
+  flex-grow: 2;
+}
+
+.menu-list .menu-list-des .menu-list-des-right .list-des h3,
+p {
+  color: black;
+}
+
+.menu-list .menu-list-des .menu-list-des-right .price {
+  width: 15%;
+  height: 90px;
+  margin: 25px;
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 50%;
+  background-color: rgb(74, 44, 18, 0.9);
+}
+
+.menu-list .menu-list-des .menu-list-des-right .price a {
+  color: grey;
+  font-size: 30px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 5px;
+  height: 70px;
+  width: 80px;
+  border: 2px solid grey;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ___________________-MENU PAGE END _______________________________ */
