@@ -1,0 +1,15 @@
+body {
+    text-align: center;
+}
+
+button {
+    background-color: hsl(211, 100%, 60%);
+    color: white;
+    padding: 10px;
+    font-size: 25px;
+    margin: 10px;
+}
+
+#showMood {
+    font-size: 200px;
+}
