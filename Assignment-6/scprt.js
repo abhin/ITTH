@@ -72,18 +72,17 @@ let images = [
   },
 ];
 
-function shuffle(cards){
+function shuffle(cards) {
   let max = cards.length;
   let random = [];
-  for(var i = 0;i<max ; i++){
-      let randomIndex = Math.floor(Math.random()*max);
-      if(random.indexOf(randomIndex) == -1){
-          random.push(randomIndex);
-          [cards[i], cards[randomIndex]] = [cards[randomIndex], cards[i]];
-      }
-      else {
-          i--;
-      }
+  for (var i = 0; i < max; i++) {
+    let randomIndex = Math.floor(Math.random() * max);
+    if (random.indexOf(randomIndex) == -1) {
+      random.push(randomIndex);
+      [cards[i], cards[randomIndex]] = [cards[randomIndex], cards[i]];
+    } else {
+      i--;
+    }
   }
   return cards;
 }
@@ -99,7 +98,7 @@ function flipImage(index) {
     cards[index]["visible"] = true;
   } else if (second == -1) {
     second = index;
-    cards[index]["visible"] = true;    
+    cards[index]["visible"] = true;
     setTimeout(validateImage, 1000);
   } else {
     cards[first]["visible"] = false;
