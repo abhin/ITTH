@@ -59,15 +59,26 @@ console.log(Answer2([1, 20, 3000, 400]));
 
 // Answer 3 Sum of digits of a given number - Own logic
 
-const Answer3 = (number = 0) => {
-  const sum = number
-    .toString()
-    .split("")
-    .reduce((accu, curr) => {
-      return parseInt(accu) + parseInt(curr);
-    });
+// const Answer3 = (number = 0) => {
+//   const sum = number
+//     .toString()
+//     .split("")
+//     .reduce((accu, curr) => {
+//       return parseInt(accu) + parseInt(curr);
+//     });
 
-  return sum;
+//   return sum;
+// };
+
+// Answer 3 Sum of digits of a given number - Web Reference 
+var Answer3 = (num = 0) => {
+	let sum = 0;
+    while (num) {
+        digit = num % 10;
+        sum += digit;
+        num = (num - digit) / 10;
+    }
+    return sum;
 };
 
 console.log(Answer3(2124561));
