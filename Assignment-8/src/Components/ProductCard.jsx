@@ -9,7 +9,7 @@ function ProductCard({ product }) {
           <button className="add-to-cart">Add to Cart</button>
         </div>
         <div className="product-info">
-          <h4>Waffle</h4>
+          <h4>{product.category}</h4>
           <p className="product-name">{product.name}</p>
           <p>$6.50</p>
         </div>

@@ -28,7 +28,7 @@ function Cart() {
           <li>
             Vanilla Panna Cotta
             <p>
-              ß<span>x2</span>
+              <span>x2</span>
               @$6.50 $13.00
             </p>
             <span className="close">
