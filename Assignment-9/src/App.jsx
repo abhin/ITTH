@@ -59,10 +59,9 @@ function App() {
     let itemTotal = 0;
     let cartItems = Object.entries(cart);
 
-    console.log(typeof cartItems)
     cartItems?.length > 0 &&
       cartItems?.map(([index, item]) => {
-        itemTotal = itemTotal + (item?.qty * item?.productPrice);
+        itemTotal = itemTotal + item?.qty * item?.productPrice;
       });
     console.log(itemTotal);
     setTotal(itemTotal);
@@ -118,9 +117,7 @@ function App() {
       <div className="container mt-5">
         <div className="row">
           <div className="col-md-4">
-            <div className="card">
-              <AddProduct handleSubmit={handleSubmit} />
-            </div>
+            <AddProduct handleSubmit={handleSubmit} />
           </div>
           <div className="col-md-8">
             <ProductListing catalog={catalog} addToCart={addToCart} />
