@@ -1,14 +1,19 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import bodyParser from "body-parser";
+import routers from "./routers.js";
 
 dotenv.config();
 
 const PORT = 8000;
-const server = express();
+const VERSION = 'v1';
 
+const server = express();
+server.use(bodyParser.json());
+server.use(`/api/${VERSION}`, routers);
 server.get("/api/healthcheck", (req, res) => {
-  res.send({
+  res.status(200).json({
     success: true,
     message: "Server health is good",
   });
