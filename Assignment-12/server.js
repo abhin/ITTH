@@ -2,17 +2,15 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
-import routers from "./routers.js";
+import todoRouters from "./routes/todo.js";
+import {PORT, URL} from "./utilities/constants.js"
 
 dotenv.config();
 
-const PORT = 8000;
-const VERSION = 'v1';
-
 const server = express();
 server.use(bodyParser.json());
-server.use(`/api/${VERSION}`, routers);
-server.get("/api/healthcheck", (req, res) => {
+server.use(URL, todoRouters);
+server.get(`${URL}/healthcheck`, (req, res) => {
   res.status(200).json({
     success: true,
     message: "Server health is good",

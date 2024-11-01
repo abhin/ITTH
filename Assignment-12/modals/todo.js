@@ -15,23 +15,6 @@ const ToDoSchema = mongoose.Schema({
   },
 });
 
-const ToDos = mongoose.model('ToDos', ToDoSchema);
+const ToDo = mongoose.model('ToDos', ToDoSchema);
 
-async function create(req, res) {
-  const { title, description, completed } = req.body;
-
-  ToDos.create({ title, description, completed })
-    .then((data) => {
-      res.json({
-        sucess: true,
-        message: `ToDo is created Id: ${data._id}`,
-      });
-    })
-    .catch((err) => {
-      console.log("Error found during ToDo creation", err);
-    });
-}
-
-export {create};
-
-export default ToDos;
+export default ToDo;
