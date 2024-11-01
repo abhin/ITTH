@@ -61,8 +61,8 @@ function update(req, res) {
 }
 
 async function deleteTodo(req, res) {
-  const {id} = req.params;
-  const existingTodo = await ToDo.exists({ _id: id });
+  const {_id} = req.params;
+  const existingTodo = await ToDo.exists({ _id });
 
   if (existingTodo == null) {
     res.json({
@@ -70,11 +70,11 @@ async function deleteTodo(req, res) {
       message: "ToDo does not exist"
     });
   } else {
-    ToDo.findByIdAndDelete(id)
+    ToDo.findByIdAndDelete(_id)
     .then((data) => {
       res.json({
         success: true,
-        message: `ToDo is deleted Id: ${id}`
+        message: `ToDo is deleted Id: ${_id}`
       });
     })
     .catch((err) => {
