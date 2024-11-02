@@ -1,28 +1,28 @@
-import ToDo from "../modals/todo.js";
+import User from "../modals/user.js";
 
 async function create(req, res) {
-  const { title, description, completed } = req.body;
+  const { name, email, password, active } = req.body;
 
-  const existingTodo = await ToDo.exists({ title });
+  const existingUser = await User.exists({ email });
 
-  if (existingTodo != null) {
+  if (existingUser != null) {
     res.status(400).json({
       success: false,
-      message: "ToDo already exists",
-      data: existingTodo,
+      message: "User already exists",
+      data: existingUser,
     });
-  } else if (!title || !description) {
+  } else if (!name || !email || !password) {
     res.status(400).json({
       success: false,
-      message: "Failed to create ToDo title and description are required.",
+      message: "Failed to create User name, email, password are required.",
     });
   } else {
-    ToDo.create({ title, description, completed })
+    User.create({ name, email, password, active })
       .then((data) => {
         res.status(200).json({
           success: true,
-          message: "ToDo is created.",
-          toDo: data,
+          message: "User is created.",
+          User: data,
         });
       })
       .catch((err) => {
@@ -35,12 +35,12 @@ async function create(req, res) {
   }
 }
 
-function getAllTodos(req, res) {
-  ToDo.find()
+function getAllUsers(req, res) {
+  User.find()
     .then((data) => {
       res.status(200).json({
         success: true,
-        toDo: data,
+        User: data,
       });
     })
     .catch((err) => {
@@ -53,22 +53,25 @@ function getAllTodos(req, res) {
 }
 
 async function update(req, res) {
-  const { id, title, description, completed } = req.body;
+  const { id, name, email, password, active } = req.body;
+  const existingUser = await User.exists({ email, _id: { $ne: id } });
 
-  const existingTodo = await ToDo.exists({ title, _id: { $ne: id } });
-
-  if (existingTodo != null) {
+  if (existingUser != null) {
     res.status(400).json({
       success: false,
-      message: "This title is already used. "
+      message: "This email is already used. "
     });
   } else {
-    ToDo.findByIdAndUpdate(id, { title, description, completed })
+    const statusChange = email != existingUser?.email && false || active;
+    
+    console.log(statusChange);
+
+    User.findByIdAndUpdate(id, { name, email, password, active: statusChange})
       .then((data) => {
         res.status(200).json({
           success: true,
-          message: "ToDo is Updated",
-          toDo: data,
+          message: "User is Updated",
+          User: data,
         });
       })
       .catch((err) => {
@@ -81,21 +84,21 @@ async function update(req, res) {
   }
 }
 
-async function deleteTodo(req, res) {
-  const { _id } = req.params;
-  const existingTodo = await ToDo.exists({ _id });
+async function deleteUser(req, res) {
+  const { _id } = req?.params;
+  const existingUser = await User.exists({ _id });
 
-  if (existingTodo == null) {
+  if (existingUser == null) {
     res.status(400).json({
       success: false,
-      message: "ToDo does not exist",
+      message: "User does not exist",
     });
   } else {
-    ToDo.findByIdAndDelete(_id)
+    User.findByIdAndDelete(_id)
       .then((data) => {
         res.status(200).json({
           success: true,
-          message: `ToDo is deleted Id: ${_id}`,
+          message: `User is deleted Id: ${_id}`,
         });
       })
       .catch((err) => {
@@ -108,4 +111,4 @@ async function deleteTodo(req, res) {
   }
 }
 
-export { create, getAllTodos, update, deleteTodo };
+export { create, getAllUsers, update, deleteUser };
