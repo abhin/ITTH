@@ -3,6 +3,13 @@ import ToDo from "../modals/todo.js";
 async function create(req, res) {
   const { title, description, completed } = req.body;
 
+  if (!title || !description) {
+    return res.status(400).json({
+      success: false,
+      message: "Failed to create ToDo title and description are required.",
+    });
+  } 
+
   const existingTodo = await ToDo.exists({ title });
 
   if (existingTodo != null) {
@@ -10,11 +17,6 @@ async function create(req, res) {
       success: false,
       message: "ToDo already exists",
       data: existingTodo,
-    });
-  } else if (!title || !description) {
-    res.status(400).json({
-      success: false,
-      message: "Failed to create ToDo title and description are required.",
     });
   } else {
     ToDo.create({ title, description, completed })
