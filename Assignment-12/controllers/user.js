@@ -75,7 +75,9 @@ async function create(req, res) {
       });
     }
 
-    const token = jwt.sign({uId: user._id}, process.env.JWT_KEY, { expiresIn: '1h' });
+    const token = jwt.sign({ uId: user._id }, process.env.JWT_KEY, {
+      expiresIn: "1h",
+    });
 
     const status = await sendEmail({
       to: email,
@@ -95,7 +97,6 @@ async function create(req, res) {
         user: user,
       });
     }
-  
   } catch (e) {
     res.status(400).json({
       success: false,
@@ -178,50 +179,54 @@ async function deleteUser(req, res) {
   }
 }
 
-
 async function activate(req, res) {
-    const {token} = req.params;
+  const { token } = req.params;
+  let data;
 
-    try {
-      const userId = jwt.verify(token, process.env.JWT_KEY);
-      const activated = await User.findById(userId?.uId);
+  try {
+    await jwt.verify(token, process.env.JWT_KEY, function (err, decoded) {
+      if (err) throw new Error("Invalid url.");
 
-      if (activated?.active) {
-        return res.status(400).json({
-          success: false,
-          message: "Invalid url"
-        });
-      }
+      data = decoded;
+    });
 
-      const user = await User.findByIdAndUpdate(userId?.uId, {active: true});
+    const activated = await User.findById(data?.uId);
 
-      if (user) {
-        const status = await sendEmail({
-          to: user.email,
-          subject: "Your ToDo Account is activated",
-          text: `
-                  Thank you ${user.name}!
-                  Your account is activated successfully. Now you can use the todo account.
-              `,
-        });
-    
-        if (status) {
-          return res.status(200).json({
-            success: true,
-            message: "Account is activated",
-            user: user,
-          });
-        }
-      } else {
-        throw new Error('Activation failed. Please check the URL is valid.');
-      }
-    } catch(e) {
-      res.status(400).json({
+    if (activated?.active) {
+      return res.status(400).json({
         success: false,
-        error: e.message,
+        message: "Invalid url",
       });
     }
-    
+
+    const user = await User.findByIdAndUpdate(data?.uId, { active: true });
+
+    if (user) {
+      const status = await sendEmail({
+        to: user?.email,
+        subject: "Your ToDo Account is activated",
+        text: `
+                  Thank you ${user?.name}!
+                  Your account is activated successfully. Now you can use the todo account.
+              `,
+      });
+
+      if (status) {
+        return res.status(200).json({
+          success: true,
+          message: "Account is activated",
+          user: user,
+        });
+      }
+    } else {
+      throw new Error("Activation failed. Please check the URL is valid.");
+    }
+  } catch (e) {
+    res.status(400).json({
+      success: false,
+      error: e.message,
+    });
+  }
 }
 
 export { create, getAllUsers, update, deleteUser, login, activate };
