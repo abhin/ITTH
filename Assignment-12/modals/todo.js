@@ -13,6 +13,11 @@ const ToDoSchema = mongoose.Schema({
     type: Boolean,
     required: false,
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  }
 });
 
 const ToDo = mongoose.model('ToDos', ToDoSchema);

@@ -35,9 +35,9 @@ export async function sendEmail({
     });
   
     return info;
-  } catch(e) {
+  } catch(error) {
     return false;
-    console.log(e);
+    console.log(error);
   }
   
 }

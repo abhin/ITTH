@@ -1,112 +1,98 @@
 import ToDo from "../modals/todo.js";
+import jwt from "jsonwebtoken";
 
 async function create(req, res) {
   const { title, description, completed } = req.body;
+  try {
+    if (!title || !description)
+      throw new Error(
+        "Failed to create ToDo title and description are required."
+      );
 
-  if (!title || !description) {
+    const existingTodo = await ToDo.exists({ title });
+    if (existingTodo != null) throw new Error("ToDo already exists");
+
+    ToDo.create({
+      title,
+      description,
+      completed,
+      user: req?.authUser?.uId,
+    }).then((data) => {
+      res.status(200).json({
+        success: true,
+        message: "ToDo is created.",
+        toDo: data,
+      });
+    });
+  } catch (error) {
     return res.status(400).json({
       success: false,
-      message: "Failed to create ToDo title and description are required.",
+      message: error.message,
     });
-  } 
-
-  const existingTodo = await ToDo.exists({ title });
-
-  if (existingTodo != null) {
-    res.status(400).json({
-      success: false,
-      message: "ToDo already exists",
-      data: existingTodo,
-    });
-  } else {
-    ToDo.create({ title, description, completed })
-      .then((data) => {
-        res.status(200).json({
-          success: true,
-          message: "ToDo is created.",
-          toDo: data,
-        });
-      })
-      .catch((err) => {
-        res.status(400).json({
-          success: false,
-          message: "Error found during User creation",
-          User: err,
-        });
-      });
   }
 }
 
-function getAllTodos(req, res) {
-  ToDo.find()
-    .then((data) => {
+async function getAllTodos(req, res) {
+  console.log(req?.authUser?.uId);
+  try {
+    ToDo.find({ user: req?.authUser?.uId }).then((data) => {
       res.status(200).json({
         success: true,
         toDo: data,
       });
-    })
-    .catch((err) => {
-      res.status(400).json({
-        success: false,
-        message: "Error found during User creation",
-        User: err,
-      });
     });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
 }
 
 async function update(req, res) {
   const { id, title, description, completed } = req.body;
+  try {
+    const existingTodo = await ToDo.exists({ title, _id: { $ne: id } });
 
-  const existingTodo = await ToDo.exists({ title, _id: { $ne: id } });
+    if (existingTodo != null) throw new Error("This title is already used. ");
 
-  if (existingTodo != null) {
+    ToDo.findOneAndUpdate(
+      { _id: id, user: req?.authUser?.uId },
+      { title, description, completed }
+    ).then((data) => {
+      res.status(200).json({
+        success: true,
+        message: "ToDo is Updated",
+        toDo: data,
+      });
+    });
+  } catch (error) {
     res.status(400).json({
       success: false,
-      message: "This title is already used. "
+      message: error.message,
     });
-  } else {
-    ToDo.findByIdAndUpdate(id, { title, description, completed })
-      .then((data) => {
-        res.status(200).json({
-          success: true,
-          message: "ToDo is Updated",
-          toDo: data,
-        });
-      })
-      .catch((err) => {
-        res.status(400).json({
-          success: false,
-          message: "Error found during User creation",
-          User: err,
-        });
-      });
   }
 }
 
 async function deleteTodo(req, res) {
   const { _id } = req.params;
-  const existingTodo = await ToDo.exists({ _id });
 
-  if (existingTodo == null) {
+  try {
+    const existingTodo = await ToDo.exists({ _id, user: req?.authUser?.uId });
+
+    if (existingTodo == null) throw new Error("ToDo does not exist");
+
+    ToDo.findOneAndDelete({ _id, user: req?.authUser?.uId }).then((data) => {
+      res.status(200).json({
+        success: true,
+        message: `ToDo is deleted Id: ${_id}`,
+      });
+    });
+  } catch (error) {
     res.status(400).json({
       success: false,
-      message: "ToDo does not exist",
+      message: error.message,
     });
-  } else {
-    ToDo.findByIdAndDelete(_id)
-      .then((data) => {
-        res.status(200).json({
-          success: true,
-          message: `ToDo is deleted Id: ${_id}`,
-        });
-      })
-      .catch((err) => {
-        res.status(400).json({
-          success: false,
-          message: "Error found during User creation",
-          User: err,
-        });
-      });
   }
 }
 

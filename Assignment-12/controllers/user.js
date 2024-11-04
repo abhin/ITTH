@@ -5,31 +5,35 @@ import jwt from "jsonwebtoken";
 
 async function login(req, res) {
   const { email, password } = req.body;
+  try {
+    if (!email || !password) {
+      throw new Error("Invalid login.");
+    }
 
-  if (!email || !password) {
-    return res.status(400).json({
-      success: false,
-      message: "Invalid login.",
-    });
-  }
+    const user = await User.findOne({ email });
+    const match = user && (await bcrypt.compare(password, user?.password));
 
-  const existingUser = await User.findOne({ email });
-  const match = await bcrypt.compare(password, existingUser.password);
+    if (!match) {
+      throw new Error("Invalid login credentials.");
+    }
 
-  if (existingUser == null || !match) {
-    res.status(400).json({
-      success: false,
-      message: "Invalid login credentials.",
+    if (!user?.active) {
+      throw new Error("Account is inactive.");
+    }
+
+    const token = jwt.sign({ uId: user?._id }, process?.env?.JWT_KEY, {
+      expiresIn: "1h",
     });
-  } else if (!existingUser.active) {
-    res.status(400).json({
-      success: false,
-      message: "Account is inactive.",
-    });
-  } else {
+
     res.status(200).json({
       success: true,
-      user: existingUser,
+      message: "Login success",
+      token: token,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
     });
   }
 }
@@ -37,22 +41,17 @@ async function login(req, res) {
 async function create(req, res) {
   const { name, email, password, active } = req.body;
 
-  if (!name || !email || !password) {
-    return res.status(400).json({
-      success: false,
-      message: "Failed to create User name, email, password are required.",
-    });
-  }
-
   try {
+    if (!name || !email || !password) {
+      throw new Error(
+        "Failed to create User name, email, password are required."
+      );
+    }
+
     const existingUser = await User.exists({ email });
 
     if (existingUser != null) {
-      return res.status(400).json({
-        success: false,
-        message: "User already exists",
-        data: existingUser,
-      });
+      throw new Error("User already exists");
     }
 
     const passwordHash = await bcrypt.hashSync(
@@ -68,14 +67,10 @@ async function create(req, res) {
     });
 
     if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: "Error found during User creation",
-        error: err,
-      });
+      throw new Error("Error found during User creation");
     }
 
-    const token = jwt.sign({ uId: user._id }, process.env.JWT_KEY, {
+    const token = jwt.sign({ uId: user._id }, process?.env?.JWT_KEY, {
       expiresIn: "1h",
     });
 
@@ -97,11 +92,10 @@ async function create(req, res) {
         user: user,
       });
     }
-  } catch (e) {
+  } catch (error) {
     res.status(400).json({
       success: false,
-      message: "Exception error catch fround.",
-      error: e.message,
+      message: error.message,
     });
   }
 }
@@ -184,9 +178,10 @@ async function activate(req, res) {
   let data;
 
   try {
-    await jwt.verify(token, process.env.JWT_KEY, function (err, decoded) {
-      if (err) throw new Error("Invalid url.");
+    if (!token) throw new Error("Unauthorization access");
 
+    await jwt.verify(token, process?.env?.JWT_KEY, function (err, decoded) {
+      if (err) throw new Error("Invalid url.");
       data = decoded;
     });
 
@@ -201,30 +196,30 @@ async function activate(req, res) {
 
     const user = await User.findByIdAndUpdate(data?.uId, { active: true });
 
-    if (user) {
-      const status = await sendEmail({
-        to: user?.email,
-        subject: "Your ToDo Account is activated",
-        text: `
+    if (!user)
+      throw new Error("Activation failed. Please check the URL is valid.");
+
+    const status = await sendEmail({
+      to: user?.email,
+      subject: "Your ToDo Account is activated",
+      text: `
                   Thank you ${user?.name}!
                   Your account is activated successfully. Now you can use the todo account.
               `,
-      });
+    });
 
-      if (status) {
-        return res.status(200).json({
-          success: true,
-          message: "Account is activated",
-          user: user,
-        });
-      }
-    } else {
-      throw new Error("Activation failed. Please check the URL is valid.");
-    }
-  } catch (e) {
+    if (!status) throw new Error("Account activation succes. Failed to send email.");
+      
+    return res.status(200).json({
+        success: true,
+        message: "Account is activated",
+        user: user,
+      });
+    
+  } catch (error) {
     res.status(400).json({
       success: false,
-      error: e.message,
+      error: error.message,
     });
   }
 }
