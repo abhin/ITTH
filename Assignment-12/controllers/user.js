@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import User from "../modals/user.js";
 import { sendEmail } from "../utilities/function.js";
+import jwt from "jsonwebtoken";
 
 async function login(req, res) {
   const { email, password } = req.body;
@@ -43,57 +44,64 @@ async function create(req, res) {
     });
   }
 
-  const existingUser = await User.exists({ email });
+  try {
+    const existingUser = await User.exists({ email });
 
-  if (existingUser != null) {
-    res.status(400).json({
-      success: false,
-      message: "User already exists",
-      data: existingUser,
-    });
-  } else {
+    if (existingUser != null) {
+      return res.status(400).json({
+        success: false,
+        message: "User already exists",
+        data: existingUser,
+      });
+    }
+
     const passwordHash = await bcrypt.hashSync(
       password,
       parseInt(process.env.SALT_ROUNDS)
     );
-    User.create({ name, email, password: passwordHash, active })
-      .then((data) => {
-        const status = sendEmail({
-          to: email,
-          subject: "ToDo Account Activation",
-          text: `
-            Welcome ${name}!
-            Thank you for signup
-            Please click on the bewlo link to activate your account. 
-            Link: https://www.google.com/    
-        `,
-        })
-          .then((data) => {
-            console.log(status);
 
-            if (status) {
-              res.status(200).json({
-                success: true,
-                message: "User is created.",
-                user: data,
-              });
-            }
-          })
-          .catch((err) => {
-            res.status(400).json({
-              success: false,
-              message: "Error found during User creation",
-              error: err,
-            });
-          });
-      })
-      .catch((err) => {
-        res.status(400).json({
-          success: false,
-          message: "Error found during User creation",
-          error: err,
-        });
+    const user = await User.create({
+      name,
+      email,
+      password: passwordHash,
+      active,
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "Error found during User creation",
+        error: err,
       });
+    }
+
+    const token = jwt.sign({uId: user._id}, process.env.JWT_KEY, { expiresIn: '1h' });
+
+    const status = await sendEmail({
+      to: email,
+      subject: "Your ToDo Account Activation",
+      text: `
+              Welcome ${name}!
+              Thank you for signup
+              Please click on the bewlo link to activate your account. 
+              Link: http://localhost:8000/api/v1/users/activate/${token}  
+          `,
+    });
+
+    if (status) {
+      return res.status(200).json({
+        success: true,
+        message: "User is created.",
+        user: user,
+      });
+    }
+  
+  } catch (e) {
+    res.status(400).json({
+      success: false,
+      message: "Exception error catch fround.",
+      error: e.message,
+    });
   }
 }
 
@@ -170,4 +178,50 @@ async function deleteUser(req, res) {
   }
 }
 
-export { create, getAllUsers, update, deleteUser, login };
+
+async function activate(req, res) {
+    const {token} = req.params;
+
+    try {
+      const userId = jwt.verify(token, process.env.JWT_KEY);
+      const activated = await User.findById(userId?.uId);
+
+      if (activated?.active) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid url"
+        });
+      }
+
+      const user = await User.findByIdAndUpdate(userId?.uId, {active: true});
+
+      if (user) {
+        const status = await sendEmail({
+          to: user.email,
+          subject: "Your ToDo Account is activated",
+          text: `
+                  Thank you ${user.name}!
+                  Your account is activated successfully. Now you can use the todo account.
+              `,
+        });
+    
+        if (status) {
+          return res.status(200).json({
+            success: true,
+            message: "Account is activated",
+            user: user,
+          });
+        }
+      } else {
+        throw new Error('Activation failed. Please check the URL is valid.');
+      }
+    } catch(e) {
+      res.status(400).json({
+        success: false,
+        error: e.message,
+      });
+    }
+    
+}
+
+export { create, getAllUsers, update, deleteUser, login, activate };

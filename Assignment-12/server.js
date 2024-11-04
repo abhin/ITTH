@@ -12,6 +12,7 @@ const server = express();
 server.use(bodyParser.json());
 server.use(URL, todoRouters);
 server.use(URL, userRouters);
+
 server.get(`${URL}/healthcheck`, (req, res) => {
   res.status(200).json({
     success: true,
