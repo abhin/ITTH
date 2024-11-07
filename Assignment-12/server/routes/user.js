@@ -8,7 +8,7 @@ import {
   activate,
 } from "../controllers/user.js";
 import { body } from "express-validator";
-import { getResult } from "../middlewares/validator.js";
+import { getValidationResult } from "../middlewares/validator.js";
 
 const router = express.Router();
 
@@ -20,7 +20,7 @@ router.post(
     .exists()
     .isStrongPassword()
     .withMessage("Invalid password"),
-    getResult,
+    getValidationResult,
   create
 );
 router.post(
@@ -29,14 +29,14 @@ router.post(
   .exists()
     .trim()
     .withMessage("Invalid password"),
-    getResult,
+    getValidationResult,
   create
 );
 router.post(
   "/users/login",
   body("email").exists().trim().isEmail().withMessage("Invalid Credentials"),
   body("password").exists().trim().notEmpty().withMessage("Invalid Credentials"),
-  getResult,
+  getValidationResult,
   login
 );
 router.get("/users/read", getAllUsers);

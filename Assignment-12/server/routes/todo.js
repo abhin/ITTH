@@ -7,7 +7,7 @@ import {
   deleteTodo,
 } from "../controllers/todo.js";
 import { body } from "express-validator";
-import { getResult } from "../middlewares/validator.js";
+import { getValidationResult } from "../middlewares/validator.js";
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ router.post(
   "/todos/create",
   isLoggedIn,
   body("title").exists().trim().isLength({ min: 3 }),
-  getResult,
+  getValidationResult,
   create
 );
 router.get("/todos/read", isLoggedIn, getAllTodos);

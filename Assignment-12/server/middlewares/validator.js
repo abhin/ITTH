@@ -1,6 +1,6 @@
 import {validationResult} from "express-validator";
 
-export function getResult(req, res, next) {
+export function getValidationResult(req, res, next) {
     try {
         const result = validationResult(req);
         if (result.isEmpty()) 
