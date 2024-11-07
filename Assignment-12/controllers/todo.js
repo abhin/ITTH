@@ -35,7 +35,7 @@ async function create(req, res) {
 async function getAllTodos(req, res) {
   console.log(req?.authUser?.uId);
   try {
-    ToDo.find({ user: req?.authUser?.uId }).populate("user").then((data) => {
+    ToDo.find({ user: req?.authUser?.uId }).populate("user", "name email").then((data) => {
       res.status(200).json({
         success: true,
         toDo: data,
