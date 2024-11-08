@@ -5,7 +5,7 @@ import { useState } from "react";
 
 export default function GlobalContextProvider({ children }) {
   const navigate = useNavigate();
-  const [token, setToken] = useState();
+  const [userToken, setUserToken] = useState();
 
   const login = (email, password) => {
     fetch("http://localhost:8000/api/v1/users/login", {
@@ -21,7 +21,7 @@ export default function GlobalContextProvider({ children }) {
           showError(data.message);
           return;
         } else {
-          setToken(data?.token);
+          setUserToken(data?.token);
           navigate("/Dashboard");
         }
       })
@@ -53,7 +53,7 @@ export default function GlobalContextProvider({ children }) {
       });
   };
   return (
-    <GlobalContext.Provider value={{ login, signUp, token }}>
+    <GlobalContext.Provider value={{ login, signUp, userToken }}>
       {children}
     </GlobalContext.Provider>
   );
