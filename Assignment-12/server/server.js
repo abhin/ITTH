@@ -1,15 +1,18 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors"
 import bodyParser from "body-parser";
 import todoRouters from "./routes/todo.js";
 import userRouters from "./routes/user.js";
-import {PORT, URL} from "./utilities/constants.js"
+import { PORT, URL } from "./utilities/constants.js";
+
 
 dotenv.config();
 
 const server = express();
 server.use(bodyParser.json());
+server.use(cors({ orgin: "http://localhost:5173"}));
 server.use(URL, todoRouters);
 server.use(URL, userRouters);
 

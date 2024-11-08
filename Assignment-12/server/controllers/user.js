@@ -88,7 +88,8 @@ async function create(req, res) {
     if (status) {
       return res.status(200).json({
         success: true,
-        message: "User is created.",
+        message:
+          "Account is created successfully. Please check your email for the account activation email.",
         user: user,
       });
     }
@@ -208,14 +209,14 @@ async function activate(req, res) {
               `,
     });
 
-    if (!status) throw new Error("Account activation succes. Failed to send email.");
-      
+    if (!status)
+      throw new Error("Account activation succes. Failed to send email.");
+
     return res.status(200).json({
-        success: true,
-        message: "Account is activated",
-        user: user,
-      });
-    
+      success: true,
+      message: "Account is activated",
+      user: user,
+    });
   } catch (error) {
     res.status(400).json({
       success: false,

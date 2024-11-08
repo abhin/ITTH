@@ -14,12 +14,13 @@ const router = express.Router();
 
 router.post(
   "/users/signup",
-  body("email").trim().exists().isEmail().withMessage("Invalid Email"),
+  body("name").exists().trim().notEmpty().isLength({min:3}).withMessage("Name should be Minimum 3 characters"),
+  body("email").exists().trim().isEmail().withMessage("Invalid Email"),
   body("password")
     .trim()
     .exists()
-    .isStrongPassword()
-    .withMessage("Invalid password"),
+    .isLength({min:5})
+    .withMessage("Password should be Minimum 5 characters"),
     getValidationResult,
   create
 );
