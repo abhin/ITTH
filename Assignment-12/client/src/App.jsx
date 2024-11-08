@@ -1,44 +1,22 @@
 import { useContext, useEffect } from "react";
-import AddProduct from "./Components/AddProduct";
-import ProductListing from "./Components/ProductListing";
-import Cart from "./Components/Cart";
 import GlobalContext from "./GlobalContext/GlobalContext";
+import Header from "./Components/Header";
+import { Routes, Route } from "react-router-dom";
+import Dashboard from "./Components/Dashboard";
+import Login from "./Components/login";
+import Signup from "./Components/Signup";
 
 function App() {
-  const { product, catalog, cart, setCatalog, calculateCart } =
-    useContext(GlobalContext);
-
-  useEffect(() => {
-    try {
-      product?.productName &&
-        product?.productPrice &&
-        // product?.productImage &&
-        setCatalog([...catalog, product]);
-    } catch (e) {
-      console.log("Error", e);
-    }
-  }, [product]);
-
-  useEffect(() => {
-    calculateCart();
-  }, [cart]);
-
   return (
     <>
       <div className="container mt-5">
-        <div className="row">
-          <div className="col-md-4">
-            <AddProduct />
-          </div>
-          <div className="col-md-8">
-            <ProductListing />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-12 mt-5">
-            <Cart />
-          </div>
-        </div>
+        <Header />
+        <Routes>
+         <Route path="/Dashboard" element={<Dashboard/>} />
+         <Route path="/" element={<Login/>} />
+         <Route path="/login" element={<Login/>} />
+         <Route path="/signup" element={<Signup />} />
+        </Routes>
       </div>
     </>
   );
