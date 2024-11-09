@@ -1,11 +1,12 @@
 import GlobalContext from "./GlobalContext";
 import { showError, showSucess } from "../Functions/Message";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function GlobalContextProvider({ children }) {
   const navigate = useNavigate();
   const [user, setUser] = useState();
+  const [toDos, setToDos] = useState();
 
   const login = (email, password) => {
     fetch("http://localhost:8000/api/v1/users/login", {
@@ -52,8 +53,108 @@ export default function GlobalContextProvider({ children }) {
         showError(err.message);
       });
   };
+
+  const addTodo = (title, description) => {
+    fetch("http://localhost:8000/api/v1/todos/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: user?.token,
+      },
+      body: JSON.stringify({ title, description }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data?.success) {
+          showError(data.message);
+          return;
+        } else {
+          setToDos([data.toDo, ...toDos])
+          showSucess(data.message);
+        }
+      })
+      .catch((err) => {
+        showError(err.message);
+      });
+  };
+
+  const getAllToDo = () => {
+    fetch("http://localhost:8000/api/v1/todos/read", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: user?.token,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data?.success) {
+          showError(data.message);
+          console.log("error", data.message);
+          return;
+        } else {
+          setToDos(data.toDo);
+        }
+      })
+      .catch((err) => {
+        showError(err.message);
+      });
+  };
+
+  const updateToDo = () => (id, completed) => {
+    alert('foo');
+    // fetch("http://localhost:8000/api/v1/todos/update", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: user?.token,
+    //   },
+    //   body: JSON.stringify({id, completed }),
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     if (!data?.success) {
+    //       showError(data.message);
+    //       return;
+    //     } else {
+    //       getAllToDo();
+    //       showSucess(data.message);
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     showError(err.message);
+    //   });
+  };
+
+  const deleteToDo = () => (id) => {
+    alert('foo');
+    fetch(`http://localhost:8000/api/v1/todos/delete/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: user?.token,
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data?.success) {
+          showError(data.message);
+          return;
+        } else {
+          getAllToDo();
+          showSucess(data.message);
+        }
+      })
+      .catch((err) => {
+        showError(err.message);
+      });
+  };
+
+  useEffect(() => {
+    if (user) getAllToDo();
+  }, [user]);
+
   return (
-    <GlobalContext.Provider value={{ login, signUp, user }}>
+    <GlobalContext.Provider value={{ login, signUp, user, addTodo, toDos, updateToDo, deleteToDo }}>
       {children}
     </GlobalContext.Provider>
   );

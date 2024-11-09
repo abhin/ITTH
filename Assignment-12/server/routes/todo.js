@@ -20,6 +20,6 @@ router.post(
 );
 router.get("/todos/read", isLoggedIn, getAllTodos);
 router.put("/todos/update", isLoggedIn, update);
-router.get("/todos/delete/:_id", isLoggedIn, deleteTodo);
+router.delete("/todos/delete/:_id", isLoggedIn, deleteTodo);
 
 export default router;

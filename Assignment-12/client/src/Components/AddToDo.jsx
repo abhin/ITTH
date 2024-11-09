@@ -1,8 +1,10 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import GlobalContext from "../GlobalContext/GlobalContext";
 
 export default function AddTodo() {
-  const { handleSubmit} = useContext(GlobalContext);
+  const { addTodo} = useContext(GlobalContext);
+  const [title, setTitle] = useState();
+  const [desc, setDesc] = useState();
   return (
     <>
       <div className="card">
@@ -13,7 +15,8 @@ export default function AddTodo() {
           <form
             id="todoForm"
             onSubmit={(e) => {
-              handleSubmit(e);
+              e.preventDefault();
+              addTodo(title, desc);
             }}
           >
             <div className="mb-3">
@@ -26,6 +29,7 @@ export default function AddTodo() {
                 id="title"
                 placeholder="Enter title"
                 required
+                onChange={(e) => { setTitle(e.currentTarget.value) }}
               />
             </div>
             <div className="mb-3">
@@ -36,6 +40,7 @@ export default function AddTodo() {
                 className="form-control"
                 id="description"
                 placeholder="Enter description"
+                onChange={(e) => { setDesc(e.currentTarget.value) }}
               />
             </div>
             <button type="submit" className="btn btn-primary w-100">
