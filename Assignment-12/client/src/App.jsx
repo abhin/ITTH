@@ -5,7 +5,7 @@ import Dashboard from "./Components/Dashboard";
 import Login from "./Components/login";
 import Signup from "./Components/Signup";
 import { ToastContainer } from "react-toastify";
-import VerifyLoginSession from "./auth/VerifyLoginSession";
+import VerifyUserLogin from "./auth/VerifyUserLogin";
 
 function App() {
   return (
@@ -14,13 +14,13 @@ function App() {
         <Header />
         <ToastContainer />
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={<Login />} />
           <Route
-            path="/Dashboard"
+            path="/dashboard"
             element={
-              <VerifyLoginSession>
+              <VerifyUserLogin>
                 <Dashboard />
-              </VerifyLoginSession>
+              </VerifyUserLogin>
             }
           />
           <Route path="/login" element={<Login />} />

@@ -1,10 +1,14 @@
-import React from 'react';
+import { useContext } from "react";
+import GlobalContext from "../GlobalContext/GlobalContext";
 
 function Header() {
+  const { user } = useContext(GlobalContext);
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-2">
       <div className="container">
-        <a className="navbar-brand" href="/">ToDo</a>
+        <a className="navbar-brand" href="/">
+          ToDo
+        </a>
         <button
           className="navbar-toggler"
           type="button"
@@ -18,15 +22,29 @@ function Header() {
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
-            <li className="nav-item">
-              <a className="nav-link" href="/Dashboard">Dashboard</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/login">Login</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/signup">Signup</a>
-            </li>
+            {user && (
+              <>
+                <li className="nav-item">
+                  <a className="nav-link" href="/dashboard">
+                    Dashboard
+                  </a>
+                </li>
+              </>
+            )}
+            {!user && (
+              <>
+                <li className="nav-item">
+                  <a className="nav-link" href="/login">
+                    Login
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="/signup">
+                    Signup
+                  </a>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>

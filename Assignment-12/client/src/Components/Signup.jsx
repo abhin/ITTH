@@ -19,13 +19,13 @@ function Signup() {
         >
           <div className="mb-3">
             <label htmlFor="username" className="form-label">
-              Username
+              Name
             </label>
             <input
               type="text"
               className="form-control"
-              id="username"
-              placeholder="Enter username"
+              id="name"
+              placeholder="Enter name"
               required
               onChange={(e) => {
                 setName(e.currentTarget.value);
