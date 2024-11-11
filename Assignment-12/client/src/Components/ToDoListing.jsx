@@ -17,8 +17,9 @@ export default function ToDoListing() {
                 key={index}
                 title={todo.title}
                 desc={todo.description}
-                completed={todo.classNameÌcompleted}
-                id={todo.id}
+                completed={todo.completed}
+                id={todo._id}
+
               />
             ))}
           </div>

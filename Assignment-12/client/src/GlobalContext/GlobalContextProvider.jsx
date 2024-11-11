@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 export default function GlobalContextProvider({ children }) {
   const navigate = useNavigate();
   const [user, setUser] = useState();
-  const [toDos, setToDos] = useState();
+  const [toDos, setToDos] = useState([]);
 
   const login = (email, password) => {
     fetch("http://localhost:8000/api/v1/users/login", {
@@ -101,38 +101,40 @@ export default function GlobalContextProvider({ children }) {
       });
   };
 
-  const updateToDo = () => (id, completed) => {
-    alert('foo');
-    // fetch("http://localhost:8000/api/v1/todos/update", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: user?.token,
-    //   },
-    //   body: JSON.stringify({id, completed }),
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     if (!data?.success) {
-    //       showError(data.message);
-    //       return;
-    //     } else {
-    //       getAllToDo();
-    //       showSucess(data.message);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     showError(err.message);
-    //   });
+  const updateToDo = (id, completed) => {
+    fetch("http://localhost:8000/api/v1/todos/update", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:  user?.token,
+      },
+      body: JSON.stringify({ id, completed }), 
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json(); 
+      })
+      .then((data) => {
+        if (!data?.success) {
+          showError(data.message);
+        } else {
+          getAllToDo();
+          showSucess(data.message);
+        }
+      })
+      .catch((err) => {
+        showError(err.message);
+      });
   };
-
-  const deleteToDo = () => (id) => {
-    alert('foo');
+  
+  const deleteToDo = (id) => {
     fetch(`http://localhost:8000/api/v1/todos/delete/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: user?.token,
-      }
+      },
     })
       .then((res) => res.json())
       .then((data) => {

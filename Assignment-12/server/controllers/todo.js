@@ -17,6 +17,7 @@ async function create(req, res) {
       description,
       completed,
       user: req?.authUser?.uId,
+      completed: false
     }).then((data) => {
       res.status(200).json({
         success: true,
@@ -33,7 +34,6 @@ async function create(req, res) {
 }
 
 async function getAllTodos(req, res) {
-  console.log(req?.authUser?.uId);
   try {
     ToDo.find({ user: req?.authUser?.uId }).populate("user", "name email").then((data) => {
       res.status(200).json({
@@ -75,17 +75,17 @@ async function update(req, res) {
 }
 
 async function deleteTodo(req, res) {
-  const { _id } = req.params;
+  const { id } = req.params;
 
   try {
-    const existingTodo = await ToDo.exists({ _id, user: req?.authUser?.uId });
+    const existingTodo = await ToDo.exists({ _id: id, user: req?.authUser?.uId });
 
     if (existingTodo == null) throw new Error("ToDo does not exist");
 
-    ToDo.findOneAndDelete({ _id, user: req?.authUser?.uId }).then((data) => {
+    ToDo.findOneAndDelete({ _id: id, user: req?.authUser?.uId }).then((data) => {
       res.status(200).json({
         success: true,
-        message: `ToDo is deleted Id: ${_id}`,
+        message: `${data.title} ToDo is deleted.`,
       });
     });
   } catch (error) {

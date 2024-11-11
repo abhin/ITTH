@@ -1,6 +1,8 @@
 import { toast } from "react-toastify";
 
 export const showError = (err) => {
+
+  console.log(err)
   if (typeof err == "object") {
     err?.errors.forEach((error) => {
       toast.error(error?.msg);
