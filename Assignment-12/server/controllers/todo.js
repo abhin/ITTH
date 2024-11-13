@@ -1,5 +1,4 @@
 import ToDo from "../modals/todo.js";
-import jwt from "jsonwebtoken";
 
 async function create(req, res) {
   const { title, description, completed } = req.body;

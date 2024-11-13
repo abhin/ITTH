@@ -12,14 +12,14 @@ import { getValidationResult } from "../middlewares/validator.js";
 const router = express.Router();
 
 router.post(
-  "/todos/create",
+  "/create",
   isLoggedIn,
   body("title").exists().trim().isLength({ min: 3 }),
   getValidationResult,
   create
 );
-router.get("/todos/read", isLoggedIn, getAllTodos);
-router.put("/todos/update", isLoggedIn, update);
-router.delete("/todos/delete/:id", isLoggedIn, deleteTodo);
+router.get("/read", isLoggedIn, getAllTodos);
+router.put("/update", isLoggedIn, update);
+router.delete("/delete/:id", isLoggedIn, deleteTodo);
 
 export default router;

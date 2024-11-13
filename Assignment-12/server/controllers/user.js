@@ -1,45 +1,11 @@
 import bcrypt from "bcrypt";
 import User from "../modals/user.js";
-import { sendEmail } from "../utilities/function.js";
+import { sendAccountActivationEmail, sendEmail } from "../utilities/function.js";
 import jwt from "jsonwebtoken";
-
-async function login(req, res) {
-  const { email, password } = req.body;
-  try {
-    if (!email || !password) {
-      throw new Error("Invalid login.");
-    }
-
-    const user = await User.findOne({ email });
-    const match = user && (await bcrypt.compare(password, user?.password));
-
-    if (!match) {
-      throw new Error("Invalid login credentials.");
-    }
-
-    if (!user?.active) {
-      throw new Error("Account is inactive.");
-    }
-
-    const token = jwt.sign({ uId: user?._id }, process?.env?.JWT_KEY, {
-      expiresIn: "1h",
-    });
-
-    res.status(200).json({
-      success: true,
-      message: "Login success",
-      user: {token, name: user.name, email: user.email}
-    });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
-  }
-}
+import { generateAccessToken } from "../utilities/function.js";
 
 async function create(req, res) {
-  const { name, email, password, active } = req.body;
+  const { name, email, password, profilePic, active } = req.body;
 
   try {
     if (!name || !email || !password) {
@@ -63,6 +29,7 @@ async function create(req, res) {
       name,
       email,
       password: passwordHash,
+      profilePic,
       active,
     });
 
@@ -70,29 +37,20 @@ async function create(req, res) {
       throw new Error("Error found during User creation");
     }
 
-    const token = jwt.sign({ uId: user._id }, process?.env?.JWT_KEY, {
-      expiresIn: "1h",
-    });
+    const status = await sendAccountActivationEmail(user);
 
-    const status = await sendEmail({
-      to: email,
-      subject: "Your ToDo Account Activation",
-      text: `
-              Welcome ${name}!
-              Thank you for signup
-              Please click on the bewlo link to activate your account. 
-              Link: http://localhost:8000/api/v1/users/activate/${token}  
-          `,
-    });
-
-    if (status) {
-      return res.status(200).json({
-        success: true,
-        message:
-          "Account is created successfully. Please check your email for the account activation email.",
-        user: user,
-      });
+    if (!status) {
+      throw new Error(
+        "Failed to send activation email. Please contact support."
+      );
     }
+
+    return res.status(200).json({
+      success: true,
+      message:
+        "Account is created successfully. Please check your email for the account activation email.",
+      user: user,
+    });
   } catch (error) {
     res.status(400).json({
       success: false,
@@ -225,4 +183,4 @@ async function activate(req, res) {
   }
 }
 
-export { create, getAllUsers, update, deleteUser, login, activate };
+export { create, getAllUsers, update, deleteUser, activate };

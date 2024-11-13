@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken";
+import { Strategy } from "passport-google-oauth20";
+import { create } from "../controllers/user.js";
 
 export function isLoggedIn(req, res, next) {
   const token = req.headers.authorization;
@@ -16,3 +18,20 @@ export function isLoggedIn(req, res, next) {
     });
   }
 }
+
+export const googleStrategy = () => {
+  return new Strategy(
+    {
+      clientID: process?.env?.GOOGLE_CLIENT_ID,
+      clientSecret: process?.env?.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://localhost:8000/api/v1/auth/google/callback",
+    },
+    function(accessToken, refreshToken, profile, cb) {
+      try {
+        return cb(null, {profile});
+      } catch (error) {
+        return cb(error);
+      }
+    }
+  );
+};
