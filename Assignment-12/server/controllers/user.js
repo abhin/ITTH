@@ -2,7 +2,6 @@ import bcrypt from "bcrypt";
 import User from "../modals/user.js";
 import { sendAccountActivationEmail, sendEmail } from "../utilities/function.js";
 import jwt from "jsonwebtoken";
-import { generateAccessToken } from "../utilities/function.js";
 
 async function create(req, res) {
   const { name, email, password, profilePic, active } = req.body;

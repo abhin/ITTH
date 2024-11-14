@@ -4,20 +4,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useJwt } from "react-jwt";
 
-
 export default function GlobalContextProvider({ children }) {
   const navigate = useNavigate();
   const [user, setUser] = useState();
   const [toDos, setToDos] = useState([]);
-  const [email, setEmail] = useState();
-  
-  // const { decodedToken, isExpired } = useJwt(token);
-
-
-
+  const [googleUserToken, setGoogleUserToken] = useState();
+  const [isGoogleUserTokenExpired, setIsGoogleUserTokenExpired] = useState(true);
 
   const login = (email, password) => {
-    fetch("http://localhost:8000/api/v1/users/login", {
+    fetch("http://localhost:8000/api/v1/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -163,20 +158,27 @@ export default function GlobalContextProvider({ children }) {
     window.open("http://localhost:8000/api/v1/auth/google", "_self");
   };
 
-  const googleLogin = (id) => {
-    fetch("http://localhost:8000/api/v1/users/login", {
+  const verifyGoolgeUser = (token) => {
+    if (isGoogleUserTokenExpired ) {
+      showError("Login expired. Please try again");
+      navigate("/login");
+      return;
+    }
+    fetch("http://localhost:8000/api/v1/auth/google/verify", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-      },
-      body: JSON.stringify({id}),
+        Authorization: token
+      }
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log('data', data);
         if (!data?.success) {
           showError(data.message);
           return;
         } else {
+          showSucess(data.message);
           setUser(data?.user);
           navigate("/Dashboard");
         }
@@ -186,9 +188,16 @@ export default function GlobalContextProvider({ children }) {
       });
   };
 
+  const logout = () => { setUser(null);
+    navigate("/"); }
+
   useEffect(() => {
     if (user) getAllToDo();
   }, [user]);
+
+  useEffect(() => {
+    googleUserToken && verifyGoolgeUser(googleUserToken)
+  }, [googleUserToken]);
 
 
   return (
@@ -202,6 +211,10 @@ export default function GlobalContextProvider({ children }) {
         updateToDo,
         deleteToDo,
         goolgeLogin,
+        verifyGoolgeUser,
+        setGoogleUserToken,
+        setIsGoogleUserTokenExpired,
+        logout
       }}
     >
       {children}

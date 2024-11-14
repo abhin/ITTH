@@ -1,8 +1,9 @@
-import { login, googleLogin } from "../controllers/auth.js";
+import { login, googleLoginCallBack, googleUserVerify } from "../controllers/auth.js";
 import express from "express";
 import { getValidationResult } from "../middlewares/validator.js";
 import { body } from "express-validator";
 import passport from "passport";
+import { isLoggedIn } from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -25,8 +26,13 @@ router.get(
 
 router.get(
   "/google/callback",
-  passport.authenticate("google", { session: false, failureRedirect: "/login" }),
-  googleLogin
+  passport.authenticate("google", {
+    session: false,
+    failureRedirect: "/login",
+  }),
+  googleLoginCallBack
 );
+
+router.post("/google/verify", isLoggedIn, googleUserVerify);
 
 export default router;

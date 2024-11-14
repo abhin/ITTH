@@ -3,19 +3,22 @@ import GlobalContext from "../GlobalContext/GlobalContext";
 import { useParams } from "react-router-dom";
 import { useJwt } from "react-jwt";
 
-
 export default function Login() {
-  const { login, goolgeLogin } = useContext(GlobalContext);
+  const {
+    login,
+    goolgeLogin,
+    setGoogleUserToken,
+    setIsGoogleUserTokenExpired,
+  } = useContext(GlobalContext);
   const [email, setEmail] = useState("");
   const [password, setpassword] = useState("");
   const { token } = useParams();
-  const { decodedToken, isExpired } = useJwt(token);
-
-
+  const { isExpired } = useJwt(token);
 
   useEffect(() => {
-    console.log(decodedToken);
-  }, [decodedToken]);
+    setIsGoogleUserTokenExpired(isExpired);
+    setGoogleUserToken(token);
+  }, []);
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
@@ -55,7 +58,11 @@ export default function Login() {
           <button type="submit" className="btn btn-dark w-100 mb-2">
             Login
           </button>
-          <button type="button" className="btn btn-info w-100" onClick={goolgeLogin}>
+          <button
+            type="button"
+            className="btn btn-info w-100"
+            onClick={goolgeLogin}
+          >
             Google Login
           </button>
         </form>

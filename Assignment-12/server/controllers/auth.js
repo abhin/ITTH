@@ -39,7 +39,7 @@ async function login(req, res) {
   }
 }
 
-async function googleLogin(req, res) {
+async function googleLoginCallBack(req, res) {
   const { name, picture, sub, email, email_verified } = JSON.parse(
     req?.user?.profile?._raw
   );
@@ -63,11 +63,7 @@ async function googleLogin(req, res) {
       );
     }
 
-    res.redirect(`http://localhost:5173/${generateAccessToken(
-      user._id
-    )}`);
-
-    
+    res.redirect(`http://localhost:5173/${generateAccessToken(email, "1m")}`);
   } catch (error) {
     res.status(400).json({
       success: false,
@@ -76,4 +72,31 @@ async function googleLogin(req, res) {
   }
 }
 
-export { login, googleLogin };
+function googleUserVerify(req, res) {
+  const {uId} = req.authUser;
+
+
+console.log('email', uId)
+  User.findOne({ email: uId })
+    .then((data) => {
+      res.status(200).json({
+        success: true,
+        message: "Google user verification success",
+        user: {
+          token: generateAccessToken(data._id),
+          name: data.name,
+          email: data.email,
+          profilePic: data.profilePic,
+        },
+      });
+    })
+    .catch((err) => {
+      res.status(400).json({
+        success: false,
+        message: "Error/ Timeout Google user verification. Please try again",
+        error: err,
+      });
+    });
+}
+
+export { login, googleLoginCallBack, googleUserVerify };

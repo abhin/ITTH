@@ -2,7 +2,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./Components/Header";
 import { Routes, Route } from "react-router-dom";
 import Dashboard from "./Components/Dashboard";
-import Login from "./Components/login";
+import Login from "./Components/Login";
 import Signup from "./Components/Signup";
 import { ToastContainer } from "react-toastify";
 import VerifyUserLogin from "./auth/VerifyUserLogin";
@@ -13,7 +13,8 @@ function App() {
       <div className="container mt-5">
         <Header />
         <ToastContainer />
-        <Routes>
+        <Routes >
+          <Route path="/" element={<Login />} />
           <Route path="/:token" element={<Login />} />
           <Route
             path="/dashboard"

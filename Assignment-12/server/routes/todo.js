@@ -14,7 +14,7 @@ const router = express.Router();
 router.post(
   "/create",
   isLoggedIn,
-  body("title").exists().trim().isLength({ min: 3 }),
+  body("title").exists().trim().isLength({ min: 3 }).withMessage("Title should be Minimum 3 characters"),
   getValidationResult,
   create
 );

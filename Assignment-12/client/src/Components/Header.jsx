@@ -3,7 +3,7 @@ import GlobalContext from "../GlobalContext/GlobalContext";
 import { Link } from "react-router-dom";
 
 function Header() {
-  const { user } = useContext(GlobalContext);
+  const { user, logout } = useContext(GlobalContext);
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-2">
       <div className="container">
@@ -29,6 +29,27 @@ function Header() {
                   <Link className="nav-link" to="/dashboard">
                     Dashboard
                   </Link>
+                </li>
+                <li className="nav-item">
+                  <button
+                    onClick={logout}
+                    type="button"
+                    className="btn btn-link"
+                    style={{ color: "white", textDecoration: "none" }}
+                  >
+                    Logout
+                  </button>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/dashboard">
+                    {user.name}
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <img
+                    src={user.profilePic}
+                    style={{ width: "40px", height: "40px" }}
+                  />
                 </li>
               </>
             )}
