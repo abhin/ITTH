@@ -14,7 +14,7 @@ function App() {
         <Header />
         <ToastContainer />
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/:token" element={<Login />} />
           <Route
             path="/dashboard"
             element={

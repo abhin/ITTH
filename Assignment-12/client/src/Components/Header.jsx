@@ -1,14 +1,15 @@
 import { useContext } from "react";
 import GlobalContext from "../GlobalContext/GlobalContext";
+import { Link } from "react-router-dom";
 
 function Header() {
   const { user } = useContext(GlobalContext);
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-2">
       <div className="container">
-        <a className="navbar-brand" href="/">
+        <Link className="navbar-brand" to="/">
           ToDo
-        </a>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -25,23 +26,23 @@ function Header() {
             {user && (
               <>
                 <li className="nav-item">
-                  <a className="nav-link" href="/dashboard">
+                  <Link className="nav-link" to="/dashboard">
                     Dashboard
-                  </a>
+                  </Link>
                 </li>
               </>
             )}
             {!user && (
               <>
                 <li className="nav-item">
-                  <a className="nav-link" href="/login">
+                  <Link className="nav-link" to="/login">
                     Login
-                  </a>
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/signup">
+                  <Link className="nav-link" to="/signup">
                     Signup
-                  </a>
+                  </Link>
                 </li>
               </>
             )}

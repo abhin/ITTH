@@ -1,10 +1,21 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import GlobalContext from "../GlobalContext/GlobalContext";
+import { useParams } from "react-router-dom";
+import { useJwt } from "react-jwt";
+
 
 export default function Login() {
-  const { login } = useContext(GlobalContext);
-  const [email, setEmail] = useState('');
-  const [password, setpassword] = useState('');
+  const { login, goolgeLogin } = useContext(GlobalContext);
+  const [email, setEmail] = useState("");
+  const [password, setpassword] = useState("");
+  const { token } = useParams();
+  const { decodedToken, isExpired } = useJwt(token);
+
+
+
+  useEffect(() => {
+    console.log(decodedToken);
+  }, [decodedToken]);
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
@@ -25,7 +36,9 @@ export default function Login() {
               className="form-control"
               placeholder="Email"
               required
-              onChange={(e) => { setEmail(e.currentTarget.value) }}
+              onChange={(e) => {
+                setEmail(e.currentTarget.value);
+              }}
             />
           </div>
           <div className="mb-3">
@@ -34,11 +47,16 @@ export default function Login() {
               className="form-control"
               placeholder="password"
               required
-              onChange={(e) => { setpassword(e.currentTarget.value) }}
+              onChange={(e) => {
+                setpassword(e.currentTarget.value);
+              }}
             />
           </div>
-          <button type="submit" className="btn btn-dark w-100">
+          <button type="submit" className="btn btn-dark w-100 mb-2">
             Login
+          </button>
+          <button type="button" className="btn btn-info w-100" onClick={goolgeLogin}>
+            Google Login
           </button>
         </form>
       </div>

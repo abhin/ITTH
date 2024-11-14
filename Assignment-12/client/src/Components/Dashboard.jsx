@@ -1,7 +1,5 @@
-import { useContext } from "react";
 import AddToDo from "./AddToDo";
 import ToDoListing from "./ToDoListing";
-import GlobalContext from "../GlobalContext/GlobalContext";
 
 export default function Dashboard() {
   return (

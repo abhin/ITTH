@@ -28,6 +28,7 @@ async function login(req, res) {
         token: generateAccessToken(user._id),
         name: user.name,
         email: user.email,
+        profilePic: user.profilePic,
       },
     });
   } catch (error) {
@@ -56,17 +57,17 @@ async function googleLogin(req, res) {
       { new: true, upsert: true, sort: { createdAt: -1 } }
     );
 
-    if (!user.active && !await sendAccountActivationEmail(user)) {
-        throw new Error(
-          "Failed to send activation email. Please contact support."
-        );
+    if (!user.active && !(await sendAccountActivationEmail(user))) {
+      throw new Error(
+        "Failed to send activation email. Please contact support."
+      );
     }
 
-    res.status(200).json({
-      success: true,
-      message: "Google Login Success",
-      user
-    });
+    res.redirect(`http://localhost:5173/${generateAccessToken(
+      user._id
+    )}`);
+
+    
   } catch (error) {
     res.status(400).json({
       success: false,

@@ -1,12 +1,20 @@
 import GlobalContext from "./GlobalContext";
 import { showError, showSucess } from "../Functions/Message";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useJwt } from "react-jwt";
+
 
 export default function GlobalContextProvider({ children }) {
   const navigate = useNavigate();
   const [user, setUser] = useState();
   const [toDos, setToDos] = useState([]);
+  const [email, setEmail] = useState();
+  
+  // const { decodedToken, isExpired } = useJwt(token);
+
+
+
 
   const login = (email, password) => {
     fetch("http://localhost:8000/api/v1/users/login", {
@@ -69,7 +77,7 @@ export default function GlobalContextProvider({ children }) {
           showError(data.message);
           return;
         } else {
-          setToDos([data.toDo, ...toDos])
+          setToDos([data.toDo, ...toDos]);
           showSucess(data.message);
         }
       })
@@ -106,15 +114,15 @@ export default function GlobalContextProvider({ children }) {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization:  user?.token,
+        Authorization: user?.token,
       },
-      body: JSON.stringify({ id, completed }), 
+      body: JSON.stringify({ id, completed }),
     })
       .then((res) => {
         if (!res.ok) {
           throw new Error("Network response was not ok");
         }
-        return res.json(); 
+        return res.json();
       })
       .then((data) => {
         if (!data?.success) {
@@ -128,7 +136,7 @@ export default function GlobalContextProvider({ children }) {
         showError(err.message);
       });
   };
-  
+
   const deleteToDo = (id) => {
     fetch(`http://localhost:8000/api/v1/todos/delete/${id}`, {
       method: "DELETE",
@@ -151,12 +159,51 @@ export default function GlobalContextProvider({ children }) {
       });
   };
 
+  const goolgeLogin = () => {
+    window.open("http://localhost:8000/api/v1/auth/google", "_self");
+  };
+
+  const googleLogin = (id) => {
+    fetch("http://localhost:8000/api/v1/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({id}),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data?.success) {
+          showError(data.message);
+          return;
+        } else {
+          setUser(data?.user);
+          navigate("/Dashboard");
+        }
+      })
+      .catch((err) => {
+        showError(err.message);
+      });
+  };
+
   useEffect(() => {
     if (user) getAllToDo();
   }, [user]);
 
+
   return (
-    <GlobalContext.Provider value={{ login, signUp, user, addTodo, toDos, updateToDo, deleteToDo }}>
+    <GlobalContext.Provider
+      value={{
+        login,
+        signUp,
+        user,
+        addTodo,
+        toDos,
+        updateToDo,
+        deleteToDo,
+        goolgeLogin,
+      }}
+    >
       {children}
     </GlobalContext.Provider>
   );
