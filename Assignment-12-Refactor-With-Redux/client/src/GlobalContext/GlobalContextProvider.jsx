@@ -2,7 +2,6 @@ import GlobalContext from "./GlobalContext";
 import { showError, showSucess } from "../Functions/Message";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useJwt } from "react-jwt";
 
 export default function GlobalContextProvider({ children }) {
   const navigate = useNavigate();

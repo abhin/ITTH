@@ -1,9 +1,9 @@
-import { useContext } from "react";
-import GlobalContext from "../GlobalContext/GlobalContext";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 function Header() {
-  const { user, logout } = useContext(GlobalContext);
+  const user = useSelector((state) => { state.Auth.user });
+  const dispatch = useDispatch();
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-2">
       <div className="container">
