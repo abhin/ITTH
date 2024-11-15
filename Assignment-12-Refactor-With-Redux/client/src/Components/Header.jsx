@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { logout } from "../redux/Slice/Auth";
 
 function Header() {
   const user = useSelector((state) => { state.Auth.user });
@@ -32,7 +33,7 @@ function Header() {
                 </li>
                 <li className="nav-item">
                   <button
-                    onClick={logout}
+                    onClick={dispatch(logout())}
                     type="button"
                     className="btn btn-link"
                     style={{ color: "white", textDecoration: "none" }}

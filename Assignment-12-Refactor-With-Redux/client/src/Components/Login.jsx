@@ -1,24 +1,46 @@
-import { useContext, useEffect, useState } from "react";
-import GlobalContext from "../GlobalContext/GlobalContext";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useJwt } from "react-jwt";
+import { login, goolgeLogin, verifyGoolgeUser } from "../redux/Slice/Auth";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Login() {
-  const {
-    login,
-    goolgeLogin,
-    setGoogleUserToken,
-    setIsGoogleUserTokenExpired,
-  } = useContext(GlobalContext);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const nextPage = useSelector((state) => state.Auth.nextPage);
   const [email, setEmail] = useState("");
-  const [password, setpassword] = useState("");
+  const [password, setPassword] = useState("");
   const { token } = useParams();
   const { isExpired } = useJwt(token);
 
+  const redirectToPage = (page) => {
+    if (page) navigate(page);
+  };
+
+  // useEffect(() => {
+  //   if (nextPage) {
+  //     redirectToPage(nextPage);
+  //   }
+  // }, [nextPage, navigate]);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    dispatch(login({ email, password })).then((data) => {
+      alert(data)
+    })
+  };
+
+  const handleGoogleLogin = () => {
+    dispatch(verifyGoolgeUser({ token, isExpired })).then((data) => {
+      alert(data)
+    })
+  };
+
   useEffect(() => {
-    setIsGoogleUserTokenExpired(isExpired);
-    setGoogleUserToken(token);
-  }, []);
+    if (token) {
+      handleGoogleLogin();
+    }
+  }, [token]);
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
@@ -27,12 +49,7 @@ export default function Login() {
         style={{ width: "300px", backgroundColor: "#007bff" }}
       >
         <h2 className="text-center text-white mb-4">Login</h2>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            login(email, password);
-          }}
-        >
+        <form onSubmit={handleLogin}>
           <div className="mb-3">
             <input
               type="text"
@@ -51,7 +68,7 @@ export default function Login() {
               placeholder="password"
               required
               onChange={(e) => {
-                setpassword(e.currentTarget.value);
+                setPassword(e.currentTarget.value);
               }}
             />
           </div>
@@ -61,7 +78,7 @@ export default function Login() {
           <button
             type="button"
             className="btn btn-info w-100"
-            onClick={goolgeLogin}
+            onClick={() => dispatch(goolgeLogin())}
           >
             Google Login
           </button>

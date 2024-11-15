@@ -1,9 +1,8 @@
-import { useContext } from 'react'
-import GlobalContext from '../GlobalContext/GlobalContext';
+import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 export default function VerifyUserLogin({children}) {
-    const {user} = useContext(GlobalContext);
+    const user = useSelector((state) => state.Auth.user);
     
     if (user == null) return <Navigate to="/login"/>
     else return  children;

@@ -36,4 +36,6 @@ const User = createSlice({
   },
 });
 
+export const {signUp} = User.actions;
+
 export default User.reducer;

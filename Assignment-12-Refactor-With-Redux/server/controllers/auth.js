@@ -63,7 +63,7 @@ async function googleLoginCallBack(req, res) {
       );
     }
 
-    res.redirect(`http://localhost:5173/${generateAccessToken(email, "1m")}`);
+    res.redirect(`http://localhost:5173/${generateAccessToken(email, "1d")}`);
   } catch (error) {
     res.status(400).json({
       success: false,
