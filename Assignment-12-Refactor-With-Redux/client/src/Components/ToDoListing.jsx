@@ -1,9 +1,16 @@
-import { useContext } from "react";
-import GlobalContext from "../GlobalContext/GlobalContext";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import ToDo from "./ToDo";
+import { getAllToDo } from "../redux/Slice/toDoSlice.jsx";
 
 export default function ToDoListing() {
-  const { toDos } = useContext(GlobalContext);
+  const {toDos} = useSelector((state) => state.ToDo);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllToDo());
+  }, [dispatch]);
+
   return (
     <>
       <div className="card">
@@ -19,7 +26,6 @@ export default function ToDoListing() {
                 desc={todo.description}
                 completed={todo.completed}
                 id={todo._id}
-
               />
             ))}
           </div>

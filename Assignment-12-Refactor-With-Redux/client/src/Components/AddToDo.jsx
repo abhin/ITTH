@@ -1,10 +1,12 @@
-import { useContext, useState } from "react";
-import GlobalContext from "../GlobalContext/GlobalContext";
+import {useState } from "react";
+import {addTodo} from "../redux/Slice/toDoSlice";
+import { useDispatch } from "react-redux";
 
 export default function AddTodo() {
-  const { addTodo} = useContext(GlobalContext);
+  const dispatch = useDispatch();
   const [title, setTitle] = useState();
   const [desc, setDesc] = useState();
+
   return (
     <>
       <div className="card">
@@ -16,7 +18,8 @@ export default function AddTodo() {
             id="todoForm"
             onSubmit={(e) => {
               e.preventDefault();
-              addTodo(title, desc);
+              alert('foo');
+              dispatch(addTodo({title, description: desc}));
             }}
           >
             <div className="mb-3">

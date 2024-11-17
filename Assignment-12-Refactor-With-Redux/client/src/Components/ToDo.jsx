@@ -1,8 +1,6 @@
-import { useContext } from "react";
-import GlobalContext from "../GlobalContext/GlobalContext";
+import { updateToDo, deleteToDo } from '../redux/Slice/toDoSlice'
 
 export default function ToDo({ title, desc, completed, id }) {
-  const { updateToDo, deleteToDo } = useContext(GlobalContext);
 
   return (
     <>

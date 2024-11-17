@@ -1,39 +1,27 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useJwt } from "react-jwt";
-import { login, goolgeLogin, verifyGoolgeUser } from "../redux/Slice/Auth";
+import { login, googleLogin, verifyGoogleUser } from "../redux/Slice/authSlice.jsx";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const nextPage = useSelector((state) => state.Auth.nextPage);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const { token } = useParams();
   const { isExpired } = useJwt(token);
 
-  const redirectToPage = (page) => {
-    if (page) navigate(page);
-  };
-
-  // useEffect(() => {
-  //   if (nextPage) {
-  //     redirectToPage(nextPage);
-  //   }
-  // }, [nextPage, navigate]);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    dispatch(login({ email, password })).then((data) => {
-      alert(data)
-    })
+    dispatch(login({ email, password, navigate }))
   };
 
   const handleGoogleLogin = () => {
-    dispatch(verifyGoolgeUser({ token, isExpired })).then((data) => {
-      alert(data)
-    })
+    dispatch(verifyGoogleUser({ token, isExpired, navigate }))
   };
 
   useEffect(() => {
@@ -78,7 +66,7 @@ export default function Login() {
           <button
             type="button"
             className="btn btn-info w-100"
-            onClick={() => dispatch(goolgeLogin())}
+            onClick={() => dispatch(googleLogin())}
           >
             Google Login
           </button>

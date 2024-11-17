@@ -1,5 +1,5 @@
 import GlobalContext from "./GlobalContext";
-import { showError, showSucess } from "../Functions/Message";
+import { showError, showSuccess } from "../Functions/Message";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -48,7 +48,7 @@ export default function GlobalContextProvider({ children }) {
           return;
         } else {
           navigate("/login");
-          showSucess(data.message);
+          showSuccess(data.message);
         }
       })
       .catch((err) => {
@@ -72,7 +72,7 @@ export default function GlobalContextProvider({ children }) {
           return;
         } else {
           setToDos([data.toDo, ...toDos]);
-          showSucess(data.message);
+          showSuccess(data.message);
         }
       })
       .catch((err) => {
@@ -123,7 +123,7 @@ export default function GlobalContextProvider({ children }) {
           showError(data.message);
         } else {
           getAllToDo();
-          showSucess(data.message);
+          showSuccess(data.message);
         }
       })
       .catch((err) => {
@@ -145,7 +145,7 @@ export default function GlobalContextProvider({ children }) {
           return;
         } else {
           getAllToDo();
-          showSucess(data.message);
+          showSuccess(data.message);
         }
       })
       .catch((err) => {
@@ -177,7 +177,7 @@ export default function GlobalContextProvider({ children }) {
           showError(data.message);
           return;
         } else {
-          showSucess(data.message);
+          showSuccess(data.message);
           setUser(data?.user);
           navigate("/Dashboard");
         }

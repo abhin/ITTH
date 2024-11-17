@@ -1,8 +1,11 @@
-import { useContext, useState } from "react";
-import GlobalContext from "../GlobalContext/GlobalContext";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { signUp } from "../redux/Slice/userSlice.jsx";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
-  const { signUp } = useContext(GlobalContext);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setpassword] = useState("");
@@ -14,7 +17,7 @@ function Signup() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            signUp(name, email, password);
+            dispatch(signUp({ name, email, password, navigate }));
           }}
         >
           <div className="mb-3">

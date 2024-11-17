@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { logout } from "../redux/Slice/Auth";
+import { logout } from "../redux/Slice/authSlice";
 
 function Header() {
-  const user = useSelector((state) => { state.Auth.user });
+  const {user} = useSelector((state) => state.Auth);
   const dispatch = useDispatch();
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-2">
@@ -33,7 +33,7 @@ function Header() {
                 </li>
                 <li className="nav-item">
                   <button
-                    onClick={dispatch(logout())}
+                    onClick={() => dispatch(logout())}
                     type="button"
                     className="btn btn-link"
                     style={{ color: "white", textDecoration: "none" }}

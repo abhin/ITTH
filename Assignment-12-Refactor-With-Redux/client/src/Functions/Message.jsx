@@ -11,7 +11,7 @@ export const showError = (err) => {
 };
 
 
-export const showSucess = (err) => {
+export const showSuccess = (err) => {
   if (typeof err == "object") {
     err?.errors.forEach((error) => {
       toast.success(error?.msg);
