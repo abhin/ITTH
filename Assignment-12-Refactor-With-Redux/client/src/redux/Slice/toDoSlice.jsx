@@ -1,15 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { showError, showSuccess } from "../../Functions/Message";
-
-const API_BASE = "http://localhost:8000/api/v1/todos";
-
-const fetchAPI = async (url, options) => {
-  const response = await fetch(url, options);
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  return response.json();
-};
+import fetchAPI from "../../Functions/FetchAPI";
+import {API_BASE} from "../../configs/constants";
 
 export const addTodo = createAsyncThunk(
   "ToDo/addTodo",
@@ -23,7 +15,7 @@ export const addTodo = createAsyncThunk(
     }
 
     try {
-      const data = await fetchAPI(`${API_BASE}/create`, {
+      const data = await fetchAPI(`${API_BASE}/todos/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,7 +49,7 @@ export const getAllToDo = createAsyncThunk(
     }
 
     try {
-      const data = await fetchAPI(`${API_BASE}/read`, {
+      const data = await fetchAPI(`${API_BASE}/todos/read`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -81,10 +73,8 @@ export const getAllToDo = createAsyncThunk(
 export const updateToDo = createAsyncThunk(
   "ToDo/updateToDo",
   async ({ id, completed }, { rejectWithValue, dispatch, getState }) => {
-    alert(id);
     const state = getState();
     const { user } = state.Auth;
-    alert(`user ${user}`)
 
     if (!user) {
       showError("User is not logged in!");
@@ -92,7 +82,7 @@ export const updateToDo = createAsyncThunk(
     }
 
     try {
-      const data = await fetchAPI(`${API_BASE}/update`, {
+      const data = await fetchAPI(`${API_BASE}/todos/update`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -128,7 +118,7 @@ export const deleteToDo = createAsyncThunk(
     }
 
     try {
-      const data = await fetchAPI(`${API_BASE}/delete/${id}`, {
+      const data = await fetchAPI(`${API_BASE}/todos/delete/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: user?.token,
@@ -140,9 +130,9 @@ export const deleteToDo = createAsyncThunk(
         return rejectWithValue(data.message);
       }
 
-      dispatch(getAllToDo()); 
+      dispatch(getAllToDo());
       showSuccess(data.message);
-      return id; 
+      return id;
     } catch (err) {
       showError(err.message);
       return rejectWithValue(err.message);

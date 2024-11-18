@@ -1,12 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { showError, showSuccess } from "../../Functions/Message";
+import fetchAPI from "../../Functions/FetchAPI";
+import { API_BASE } from "../../configs/constants";
 
-// Async Thunk for signUp
 export const signUp = createAsyncThunk(
   "user/signUp",
   async ({ name, email, password, navigate }, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:8000/api/v1/users/signup", {
+      const data = await fetchAPI(`${API_BASE}/users/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -14,16 +15,13 @@ export const signUp = createAsyncThunk(
         body: JSON.stringify({ name, email, password }),
       });
 
-      const data = await response.json();
-
       if (!data.success) {
         showError(data.message);
         return rejectWithValue(data.message);
       }
 
       showSuccess(data.message);
-      navigate("/login");
-      return data;  // Optionally return success data if needed
+      return navigate;
     } catch (err) {
       showError(err.message);
       return rejectWithValue(err.message);
@@ -31,14 +29,41 @@ export const signUp = createAsyncThunk(
   }
 );
 
+export const updateProfile = createAsyncThunk(
+  "user/updateProfile",
+  async ({ formData }, { rejectWithValue, getState }) => {
+    const state = getState();
+    const { user } = state.Auth;
 
+    try {
+      const response = await fetch(`${API_BASE}/users/updateprofile`, {
+        method: "PUT",
+        headers: {
+          Authorization: user?.token,
+        },
+        body: formData, // formData is handled automatically as multipart/form-data
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        showError(
+          data.message || "An error occurred while updating the profile."
+        );
+        return rejectWithValue(data.message || "Failed to update profile.");
+      }
+
+      showSuccess(data.message || "Profile updated successfully!");
+      return data.user;
+    } catch (err) {
+      showError(err.message || "An unexpected error occurred.");
+      return rejectWithValue(err.message || "Failed to update profile.");
+    }
+  }
+);
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    name: "",
-    email: "",
-    password: "",
-    nextPage: "",
     loading: false,
     error: null,
   },
@@ -53,11 +78,13 @@ const userSlice = createSlice({
       })
       .addCase(signUp.fulfilled, (state) => {
         state.loading = false;
-        state.nextPage = "/login"; // Set nextPage after successful signup
       })
       .addCase(signUp.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(updateProfile.fulfilled, (state) => {
+        state.loading = false;
       });
   },
 });

@@ -1,6 +1,9 @@
 import bcrypt from "bcrypt";
 import User from "../modals/user.js";
-import { sendAccountActivationEmail, sendEmail } from "../utilities/function.js";
+import {
+  sendAccountActivationEmail,
+  sendEmail,
+} from "../utilities/function.js";
 import jwt from "jsonwebtoken";
 
 async function create(req, res) {
@@ -76,7 +79,10 @@ function getAllUsers(req, res) {
 }
 
 async function update(req, res) {
-  const { id, name, email, password, active } = req.body;
+  const { name, email, password, active } = req.body;
+  const profilePic = req?.file?.path;
+  const id = req?.authUser?.uId;
+
   const existingUser = await User.exists({ email, _id: { $ne: id } });
 
   if (existingUser != null) {
@@ -86,7 +92,13 @@ async function update(req, res) {
     });
   } else {
     const statusChange = (email != existingUser?.email && false) || active;
-    User.findByIdAndUpdate(id, { name, email, password, active: statusChange })
+    User.findByIdAndUpdate(id, {
+      name,
+      email,
+      password,
+      active: statusChange,
+      profilePic,
+    }, { new: true})
       .then((data) => {
         res.status(200).json({
           success: true,
