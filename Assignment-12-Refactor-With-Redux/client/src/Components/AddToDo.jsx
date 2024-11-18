@@ -18,7 +18,6 @@ export default function AddTodo() {
             id="todoForm"
             onSubmit={(e) => {
               e.preventDefault();
-              alert('foo');
               dispatch(addTodo({title, description: desc}));
             }}
           >

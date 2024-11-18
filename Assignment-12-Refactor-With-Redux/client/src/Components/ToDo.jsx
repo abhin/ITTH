@@ -1,7 +1,8 @@
-import { updateToDo, deleteToDo } from '../redux/Slice/toDoSlice'
+import { useDispatch } from "react-redux";
+import { updateToDo, deleteToDo } from "../redux/Slice/toDoSlice";
 
 export default function ToDo({ title, desc, completed, id }) {
-
+  const dispatch = useDispatch();
   return (
     <>
       <div className="card" style={{ width: "100rem" }}>
@@ -17,13 +18,13 @@ export default function ToDo({ title, desc, completed, id }) {
             </span>
           )}
           <p className="card-text">{desc}</p>
-          <button className="btn btn-danger" onClick={() => deleteToDo(id)}>
+          <button className="btn btn-danger" onClick={() =>  dispatch(deleteToDo({ id }))}>
             Delete
           </button>
           {!completed && (
             <button
               className="btn btn-primary m-2"
-              onClick={() => updateToDo(id, true)}
+              onClick={() => dispatch(updateToDo({ id, completed: true }))}
             >
               Mark as completed
             </button>

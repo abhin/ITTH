@@ -1,10 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { showError, showSuccess } from "../../Functions/Message";
 
-// Base API URL
 const API_BASE = "http://localhost:8000/api/v1/todos";
 
-// Helper function for API requests
 const fetchAPI = async (url, options) => {
   const response = await fetch(url, options);
   if (!response.ok) {
@@ -13,15 +11,11 @@ const fetchAPI = async (url, options) => {
   return response.json();
 };
 
-// Async Thunks
 export const addTodo = createAsyncThunk(
   "ToDo/addTodo",
   async ({ title, description }, { rejectWithValue, getState }) => {
-    const state = getState(); 
-    
-    // const user = state.auth.user; 
-
-    alert('user', user)
+    const state = getState();
+    const { user } = state.Auth;
 
     if (!user) {
       showError("User is not logged in!");
@@ -54,8 +48,8 @@ export const addTodo = createAsyncThunk(
 export const getAllToDo = createAsyncThunk(
   "ToDo/getAllToDo",
   async (_, { rejectWithValue, getState }) => {
-    const state = getState(); // Access global state
-    const user = state.auth.user; // Get user from auth state
+    const state = getState();
+    const { user } = state.Auth;
 
     if (!user) {
       showError("User is not logged in!");
@@ -87,8 +81,10 @@ export const getAllToDo = createAsyncThunk(
 export const updateToDo = createAsyncThunk(
   "ToDo/updateToDo",
   async ({ id, completed }, { rejectWithValue, dispatch, getState }) => {
-    const state = getState(); // Access global state
-    const user = state.auth.user; // Get user from auth state
+    alert(id);
+    const state = getState();
+    const { user } = state.Auth;
+    alert(`user ${user}`)
 
     if (!user) {
       showError("User is not logged in!");
@@ -110,9 +106,9 @@ export const updateToDo = createAsyncThunk(
         return rejectWithValue(data.message);
       }
 
-      dispatch(getAllToDo()); // Refresh todos
+      dispatch(getAllToDo());
       showSuccess(data.message);
-      return id; // Return updated ID
+      return id;
     } catch (err) {
       showError(err.message);
       return rejectWithValue(err.message);
@@ -123,8 +119,8 @@ export const updateToDo = createAsyncThunk(
 export const deleteToDo = createAsyncThunk(
   "ToDo/deleteToDo",
   async ({ id }, { rejectWithValue, dispatch, getState }) => {
-    const state = getState(); // Access global state
-    const user = state.auth.user; // Get user from auth state
+    const state = getState();
+    const { user } = state.Auth;
 
     if (!user) {
       showError("User is not logged in!");
@@ -144,9 +140,9 @@ export const deleteToDo = createAsyncThunk(
         return rejectWithValue(data.message);
       }
 
-      dispatch(getAllToDo()); // Refresh todos
+      dispatch(getAllToDo()); 
       showSuccess(data.message);
-      return id; // Return deleted ID
+      return id; 
     } catch (err) {
       showError(err.message);
       return rejectWithValue(err.message);
@@ -154,30 +150,26 @@ export const deleteToDo = createAsyncThunk(
   }
 );
 
-// Slice Definition
 const toDoSlice = createSlice({
   name: "ToDo",
   initialState: {
     toDos: [],
-    status: "idle", // For loading states
-    error: null,    // For error messages
+    status: "idle",
+    error: null,
   },
   reducers: {
     setToDos: (state, action) => {
       state.toDos = [action.payload, ...state.toDos];
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
-      // Add Todo
       .addCase(addTodo.fulfilled, (state, action) => {
         state.toDos.unshift(action.payload);
       })
-      // Get All Todos
       .addCase(getAllToDo.fulfilled, (state, action) => {
         state.toDos = action.payload;
       })
-      // Handle Errors
       .addMatcher(
         (action) => action.type.endsWith("/rejected"),
         (state, action) => {

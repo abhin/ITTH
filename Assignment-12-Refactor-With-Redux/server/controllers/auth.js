@@ -28,7 +28,7 @@ async function login(req, res) {
         token: generateAccessToken(user._id),
         name: user.name,
         email: user.email,
-        profilePic: user.profilePic,
+        profilePic: user.profilePic || user.googleProfilePic,
       },
     });
   } catch (error) {
@@ -40,10 +40,9 @@ async function login(req, res) {
 }
 
 async function googleLoginCallBack(req, res) {
-  const { name, picture, sub, email, email_verified } = JSON.parse(
+  const { name, picture, email, email_verified } = JSON.parse(
     req?.user?.profile?._raw
   );
-  let status = true;
 
   try {
     const user = await User.findOneAndUpdate(
@@ -51,7 +50,7 @@ async function googleLoginCallBack(req, res) {
       {
         name,
         email,
-        profilePic: picture,
+        googleProfilePic: picture,
         active: email_verified,
       },
       { new: true, upsert: true, sort: { createdAt: -1 } }
@@ -73,10 +72,8 @@ async function googleLoginCallBack(req, res) {
 }
 
 function googleUserVerify(req, res) {
-  const {uId} = req.authUser;
+  const { uId } = req.authUser;
 
-
-console.log('email', uId)
   User.findOne({ email: uId })
     .then((data) => {
       res.status(200).json({
@@ -86,7 +83,7 @@ console.log('email', uId)
           token: generateAccessToken(data._id),
           name: data.name,
           email: data.email,
-          profilePic: data.profilePic,
+          profilePic: data.profilePic || data.googleProfilePic,
         },
       });
     })
