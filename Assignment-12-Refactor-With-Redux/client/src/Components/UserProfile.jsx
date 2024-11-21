@@ -3,21 +3,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateProfile } from "../redux/Slice/userSlice";
 
 export default function UserProfile() {
-  const { name, profilePic } = useSelector((state) => state.Auth.user);
+  const { user } = useSelector((state) => state.Auth) || {};
+  const { name = "", profilePic = "" } = user || {};
+  
   const dispatch = useDispatch();
-  const [uName, setUname] = useState("");
+  const [uName, setUname] = useState(name);
   const [profilePhoto, setProfilePhoto] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("name", uName);
+    formData.append("name", uName || name);
     if (profilePhoto) {
       formData.append("profilePhoto", profilePhoto);
-      
     }
-    setProfilePhoto(null)
 
+    setProfilePhoto(null);
     dispatch(updateProfile({ formData }));
   };
 
@@ -36,10 +37,8 @@ export default function UserProfile() {
                 className="form-control"
                 id="name"
                 placeholder="Enter your name"
-                value={uName || name}
-                onChange={(e) => {
-                  setUname(e.target.value);
-                }}
+                value={uName || ""}
+                onChange={(e) => setUname(e.target.value)}
                 style={{
                   borderColor: "#007bff",
                   color: "#007bff",
@@ -53,9 +52,10 @@ export default function UserProfile() {
               </label>
               {profilePic && (
                 <img
-                  className=" m-2 d-block"
-                  src={'http://localhost:8000/'+profilePic}
+                  className="m-2 d-block"
+                  src={`http://localhost:8000/${profilePic}`}
                   style={{ width: "150px", height: "150px" }}
+                  alt="Profile"
                 />
               )}
               <input
@@ -63,9 +63,7 @@ export default function UserProfile() {
                 className="form-control"
                 id="profilePhoto"
                 accept="image/*"
-                onChange={(e) => {
-                  setProfilePhoto(e.target.files[0]);
-                }}
+                onChange={(e) => setProfilePhoto(e.target.files[0])}
               />
             </div>
 

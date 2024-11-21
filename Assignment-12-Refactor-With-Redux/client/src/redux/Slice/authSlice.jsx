@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { showError, showSuccess } from "../../Functions/Message";
+import storage from "redux-persist/lib/storage";
+import { persistReducer } from "redux-persist";
 
-// Async Thunks
 export const login = createAsyncThunk(
   "auth/login",
-  async ({ email, password, navigate }, { rejectWithValue, dispatch }) => {
+  async ({ email, password, navigate }, { rejectWithValue }) => {
     try {
       const response = await fetch("http://localhost:8000/api/v1/auth/login", {
         method: "POST",
@@ -22,7 +23,7 @@ export const login = createAsyncThunk(
       }
 
       showSuccess("Login successful!");
-      navigate("/dashboard"); // Navigate to Dashboard after login
+      navigate("/dashboard");
       return data.user;
     } catch (err) {
       showError(err.message);
@@ -30,6 +31,7 @@ export const login = createAsyncThunk(
     }
   }
 );
+
 
 export const verifyGoogleUser = createAsyncThunk(
   "auth/verifyGoogleUser",
@@ -56,7 +58,7 @@ export const verifyGoogleUser = createAsyncThunk(
       }
 
       showSuccess(data.message);
-      navigate("/Dashboard"); // Navigate to Dashboard after Google verification
+      navigate("/Dashboard"); 
       return data.user;
     } catch (err) {
       showError(err.message);
@@ -65,7 +67,7 @@ export const verifyGoogleUser = createAsyncThunk(
   }
 );
 
-// Slice
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -81,6 +83,9 @@ const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
     },
+    setUser: (state, action) => {
+      state.user = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -111,5 +116,12 @@ const authSlice = createSlice({
   },
 });
 
-export const { googleLogin, logout } = authSlice.actions;
-export default authSlice.reducer;
+const persistConfig = {
+  key: "auth",
+  storage,
+};
+
+const persistedAuthReducer = persistReducer(persistConfig, authSlice.reducer);
+
+export const { googleLogin, logout, setUser } = authSlice.actions;
+export default persistedAuthReducer;

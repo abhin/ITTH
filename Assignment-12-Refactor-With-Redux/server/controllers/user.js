@@ -81,6 +81,7 @@ function getAllUsers(req, res) {
 async function update(req, res) {
   const { name, email, password, active } = req.body;
   const profilePic = req?.file?.path;
+  const token = req.headers.authorization;
   const id = req?.authUser?.uId;
 
   const existingUser = await User.exists({ email, _id: { $ne: id } });
@@ -92,18 +93,27 @@ async function update(req, res) {
     });
   } else {
     const statusChange = (email != existingUser?.email && false) || active;
-    User.findByIdAndUpdate(id, {
-      name,
-      email,
-      password,
-      active: statusChange,
-      profilePic,
-    }, { new: true})
+    User.findByIdAndUpdate(
+      id,
+      {
+        name,
+        email,
+        password,
+        active: statusChange,
+        profilePic,
+      },
+      { new: true }
+    )
       .then((data) => {
         res.status(200).json({
           success: true,
           message: "User is Updated",
-          User: data,
+          user: {
+            token: token,
+            name: data.name,
+            email: data.email,
+            profilePic: data.profilePic || data.googleProfilePic,
+          },
         });
       })
       .catch((err) => {

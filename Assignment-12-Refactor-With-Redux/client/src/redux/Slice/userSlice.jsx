@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { showError, showSuccess } from "../../Functions/Message";
 import fetchAPI from "../../Functions/FetchAPI";
 import { API_BASE } from "../../configs/constants";
+import {setUser} from "./authSlice"
 
 export const signUp = createAsyncThunk(
   "user/signUp",
@@ -31,7 +32,7 @@ export const signUp = createAsyncThunk(
 
 export const updateProfile = createAsyncThunk(
   "user/updateProfile",
-  async ({ formData }, { rejectWithValue, getState }) => {
+  async ({ formData }, { rejectWithValue, getState, dispatch }) => {
     const state = getState();
     const { user } = state.Auth;
 
@@ -41,19 +42,18 @@ export const updateProfile = createAsyncThunk(
         headers: {
           Authorization: user?.token,
         },
-        body: formData, // formData is handled automatically as multipart/form-data
+        body: formData,
       });
 
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        showError(
-          data.message || "An error occurred while updating the profile."
-        );
+        showError(data.message || "An error occurred while updating the profile.");
         return rejectWithValue(data.message || "Failed to update profile.");
       }
 
       showSuccess(data.message || "Profile updated successfully!");
+      dispatch(setUser(data.user));
       return data.user;
     } catch (err) {
       showError(err.message || "An unexpected error occurred.");
@@ -67,24 +67,19 @@ const userSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {
-    // You can add other reducers here if needed
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(signUp.pending, (state) => {
+      .addCase(updateProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(signUp.fulfilled, (state) => {
-        state.loading = false;
-      })
-      .addCase(signUp.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
       .addCase(updateProfile.fulfilled, (state) => {
         state.loading = false;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
