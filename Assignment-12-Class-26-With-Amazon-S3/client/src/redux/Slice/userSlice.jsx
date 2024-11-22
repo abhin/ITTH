@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { showError, showSuccess } from "../../Functions/Message";
 import fetchAPI from "../../Functions/FetchAPI";
 import { API_BASE } from "../../configs/constants";
-import {setUser} from "./authSlice"
 
 export const signUp = createAsyncThunk(
   "user/signUp",
@@ -34,13 +33,13 @@ export const updateProfile = createAsyncThunk(
   "user/updateProfile",
   async ({ formData }, { rejectWithValue, getState, dispatch }) => {
     const state = getState();
-    const { user } = state.Auth;
+    const { authUser } = state.Auth;
 
     try {
       const response = await fetch(`${API_BASE}/users/updateprofile`, {
         method: "PUT",
         headers: {
-          Authorization: user?.token,
+          Authorization: authUser?.token,
         },
         body: formData,
       });
@@ -53,8 +52,7 @@ export const updateProfile = createAsyncThunk(
       }
 
       showSuccess(data.message || "Profile updated successfully!");
-      dispatch(setUser(data.user));
-      return data.user;
+      return data?.user;
     } catch (err) {
       showError(err.message || "An unexpected error occurred.");
       return rejectWithValue(err.message || "Failed to update profile.");

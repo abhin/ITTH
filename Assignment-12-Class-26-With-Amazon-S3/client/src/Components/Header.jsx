@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { logout } from "../redux/Slice/authSlice";
 
 function Header() {
-  const { user } = useSelector((state) => state.Auth);
+  const { authUser } = useSelector((state) => state.Auth);
   const dispatch = useDispatch();
-  const profilePic = `http://localhost:8000/${user?.profilePic}`;
+  const profilePic = `http://localhost:8000/${authUser?.profilePic}`;
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-2">
       <div className="container">
@@ -25,7 +25,7 @@ function Header() {
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
-            {user && (
+            {authUser && (
               <>
                 <li className="nav-item">
                   <Link className="nav-link" to="/dashboard">
@@ -44,10 +44,10 @@ function Header() {
                 </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/user-profile">
-                    {user.name}
+                    {authUser.name}
                   </Link>
                 </li>
-                {user.profilePic && (
+                {authUser.profilePic && (
                   <li className="nav-item">
                     <Link className="nav-link" to="/user-profile">
                       <img
@@ -59,7 +59,7 @@ function Header() {
                 )}
               </>
             )}
-            {!user && (
+            {!authUser && (
               <>
                 <li className="nav-item">
                   <Link className="nav-link" to="/login">

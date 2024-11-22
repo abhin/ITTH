@@ -7,9 +7,9 @@ export const addTodo = createAsyncThunk(
   "ToDo/addTodo",
   async ({ title, description }, { rejectWithValue, getState }) => {
     const state = getState();
-    const { user } = state.Auth;
+    const { authUser } = state.Auth;
 
-    if (!user) {
+    if (!authUser) {
       showError("User is not logged in!");
       return rejectWithValue("User is not logged in!");
     }
@@ -19,7 +19,7 @@ export const addTodo = createAsyncThunk(
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: user?.token,
+          Authorization: authUser?.token,
         },
         body: JSON.stringify({ title, description }),
       });
@@ -41,9 +41,9 @@ export const getAllToDo = createAsyncThunk(
   "ToDo/getAllToDo",
   async (_, { rejectWithValue, getState }) => {
     const state = getState();
-    const { user } = state.Auth;
+    const { authUser } = state.Auth;
 
-    if (!user) {
+    if (!authUser) {
       showError("User is not logged in!");
       return rejectWithValue("User is not logged in!");
     }
@@ -53,7 +53,7 @@ export const getAllToDo = createAsyncThunk(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: user?.token,
+          Authorization: authUser?.token,
         },
       });
 
@@ -74,9 +74,9 @@ export const updateToDo = createAsyncThunk(
   "ToDo/updateToDo",
   async ({ id, completed }, { rejectWithValue, dispatch, getState }) => {
     const state = getState();
-    const { user } = state.Auth;
+    const { authUser } = state.Auth;
 
-    if (!user) {
+    if (!authUser) {
       showError("User is not logged in!");
       return rejectWithValue("User is not logged in!");
     }
@@ -86,7 +86,7 @@ export const updateToDo = createAsyncThunk(
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: user?.token,
+          Authorization: authUser?.token,
         },
         body: JSON.stringify({ id, completed }),
       });
@@ -110,9 +110,9 @@ export const deleteToDo = createAsyncThunk(
   "ToDo/deleteToDo",
   async ({ id }, { rejectWithValue, dispatch, getState }) => {
     const state = getState();
-    const { user } = state.Auth;
+    const { authUser } = state.Auth;
 
-    if (!user) {
+    if (!authUser) {
       showError("User is not logged in!");
       return rejectWithValue("User is not logged in!");
     }
@@ -121,7 +121,7 @@ export const deleteToDo = createAsyncThunk(
       const data = await fetchAPI(`${API_BASE}/todos/delete/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: user?.token,
+          Authorization: authUser?.token,
         },
       });
 
