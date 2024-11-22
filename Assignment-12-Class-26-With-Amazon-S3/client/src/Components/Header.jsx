@@ -1,11 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../redux/Slice/authSlice";
+import { getProfilePicUrl } from "../Functions/utilities";
 
 function Header() {
   const { authUser } = useSelector((state) => state.Auth);
   const dispatch = useDispatch();
-  const profilePic = `http://localhost:8000/${authUser?.profilePic}`;
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-2">
       <div className="container">
@@ -50,8 +51,9 @@ function Header() {
                 {authUser.profilePic && (
                   <li className="nav-item">
                     <Link className="nav-link" to="/user-profile">
+                    
                       <img
-                        src={profilePic}
+                        src={getProfilePicUrl(authUser)}
                         style={{ width: "40px", height: "40px" }}
                       />
                     </Link>

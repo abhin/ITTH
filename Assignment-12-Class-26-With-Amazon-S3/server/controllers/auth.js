@@ -28,7 +28,7 @@ async function login(req, res) {
         token: generateAccessToken(user._id),
         name: user.name,
         email: user.email,
-        profilePic: user.profilePic || user.googleProfilePic,
+        profilePic: user.profilePic,
       },
     });
   } catch (error) {
@@ -50,7 +50,7 @@ async function googleLoginCallBack(req, res) {
       {
         name,
         email,
-        googleProfilePic: picture,
+        profilePic: picture,
         active: email_verified,
       },
       { new: true, upsert: true, sort: { createdAt: -1 } }
@@ -83,7 +83,7 @@ function googleUserVerify(req, res) {
           token: generateAccessToken(data._id),
           name: data.name,
           email: data.email,
-          profilePic: data.profilePic || data.googleProfilePic,
+          profilePic: data.profilePic,
         },
       });
     })

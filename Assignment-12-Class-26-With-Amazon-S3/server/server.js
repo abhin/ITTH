@@ -21,7 +21,7 @@ const server = express();
 server.use(bodyParser.json());
 passport.use(googleStrategy());
 server.use("/uploads", express.static(path.join(__dirname, "uploads")));
-server.use(cors({ orgin: "http://localhost:5173" }));
+server.use(cors({ orgin: "*" }));
 server.use(`${URL}/auth`, authRouters);
 server.use(`${URL}/todos`, todoRouters);
 server.use(`${URL}/users`, userRouters);

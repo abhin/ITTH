@@ -5,7 +5,7 @@ import { persistReducer } from "redux-persist";
 
 export const login = createAsyncThunk(
   "auth/login",
-  async ({ email, password, navigate }, { rejectWithValue }) => {
+  async ({ email, password }, { rejectWithValue }) => {
     try {
       const response = await fetch("http://localhost:8000/api/v1/auth/login", {
         method: "POST",
@@ -23,7 +23,6 @@ export const login = createAsyncThunk(
       }
 
       showSuccess("Login successful!");
-      navigate("/dashboard");
       return data?.user;
     } catch (err) {
       showError(err.message);
@@ -35,7 +34,7 @@ export const login = createAsyncThunk(
 
 export const verifyGoogleUser = createAsyncThunk(
   "auth/verifyGoogleUser",
-  async ({ token, isExpired, navigate }, { rejectWithValue }) => {
+  async ({ token, isExpired }, { rejectWithValue }) => {
     if (isExpired) {
       showError("Login expired. Please try again");
       return rejectWithValue("Login expired");

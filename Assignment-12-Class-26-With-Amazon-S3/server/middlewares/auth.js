@@ -26,9 +26,9 @@ export const googleStrategy = () => {
       clientSecret: process?.env?.GOOGLE_CLIENT_SECRET,
       callbackURL: "http://localhost:8000/api/v1/auth/google/callback",
     },
-    function(accessToken, refreshToken, profile, cb) {
+    function (accessToken, refreshToken, profile, cb) {
       try {
-        return cb(null, {profile});
+        return cb(null, { profile });
       } catch (error) {
         return cb(error);
       }
