@@ -1,8 +1,49 @@
 import express from "express";
 import dotenv from "dotenv";
+import http from "http";
+import { Server } from "socket.io";
 
 dotenv.config();
 
-const server = express();
+const app = express();
+const httpServer = http.createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*",
+  },
+});
 
-server.listen(8001, () => console.log('Server successfully connected Port:: 8001'));
+io.on("connection", (socket) => {
+  console.log("New connection is established", socket.id);
+
+  socket.emit("connected", {
+    message: `You are connected to the server`,
+    socket: socket.id,
+  });
+
+  socket.on("join-room", (payload) => {
+    const { roomNum, name } = payload;
+    socket.join(roomNum);
+
+    io.to(roomNum).emit("join-success", {
+      success: true,
+      message: `<----------- ${name} joined to the chat -----------> `,
+    });
+  });
+
+  socket.on("send-message", (payload) => {
+    const { chatMsg, roomNum } = payload;
+
+    io.to(roomNum).emit("new-chat-message", {
+      chatMsg,
+    });
+  });
+
+  socket.on("disconnect", (payload) => {
+    console.log(`${socket.id} disconnected from server`, payload);
+  });
+});
+
+httpServer.listen(8001, () => {
+  console.log("Server successfully connected Port:: 8001");
+});
