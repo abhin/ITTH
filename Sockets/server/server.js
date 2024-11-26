@@ -24,18 +24,23 @@ io.on("connection", (socket) => {
   socket.on("join-room", (payload) => {
     const { roomNum, name } = payload;
     socket.join(roomNum);
-
     io.to(roomNum).emit("join-success", {
       success: true,
-      message: `<----------- ${name} joined to the chat -----------> `,
+      newJoin: {
+        msg:`<----------- ${name} has joined the chat! ----------->`,
+        socketId: socket.id,
+      }
     });
   });
 
   socket.on("send-message", (payload) => {
-    const { chatMsg, roomNum } = payload;
+    const { chatMsg, roomNum, name } = payload;
 
     io.to(roomNum).emit("new-chat-message", {
-      chatMsg,
+      message: chatMsg,
+      senderName: name,
+      senderSocketId: socket.id,
+      roomNum
     });
   });
 

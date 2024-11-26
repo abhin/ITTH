@@ -10,7 +10,7 @@ const socket = io("http://localhost:8001");
 
 function App() {
   const navigate = useNavigate();
-  const [chatMsg, setChatMsg] = useState([]);
+  const [chatPayload, setChatPayload] = useState([]);
   const [roomNum, setRoomNum] = useState("");
   const [name, setName] = useState("");
 
@@ -24,7 +24,8 @@ function App() {
   const sendMessage = (message) => {
     socket.emit("send-message", {
       chatMsg: message,
-      roomNum
+      roomNum,
+      name
     });
   };
 
@@ -34,14 +35,13 @@ function App() {
     });
 
     socket.on("join-success", (data) => {
-      const { message, success } = data;
-      setChatMsg((prevChatMsg) => [...prevChatMsg, message]);
+      const { success } = data;
+      setChatPayload((prevChatMsg) => [...prevChatMsg, data]);
       if (success) navigate("/chat-room");
     });
 
     socket.on("new-chat-message", (data) => {
-      const { chatMsg } = data;
-      setChatMsg((prevChatMsg) => [...prevChatMsg, chatMsg]);
+      setChatPayload((prevChatMsg) => [...prevChatMsg, data]);
     });
 
     return () => {
@@ -68,7 +68,7 @@ function App() {
           <Route path="join-room" element={enterRoomCmpont} />
           <Route
             path="chat-room"
-            element={<ChatRoom roomNum={roomNum} chatMsg={chatMsg} sendMessage={sendMessage} />}
+            element={<ChatRoom roomNum={roomNum} socketId={socket.id} chatPayload={chatPayload} sendMessage={sendMessage} />}
           />
         </Routes>
       </div>

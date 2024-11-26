@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Chat from "./Chat";
+import NoMessages from "./NoMessages";
 
-const ChatRoom = ({ roomNum, chatMsg, sendMessage }) => {
+const ChatRoom = ({ roomNum, chatPayload, sendMessage, socketId }) => {
   const [message, setMessage] = useState("");
+  const [hasMessage, setHasMessage] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!roomNum) navigate('/');
+    if (!roomNum) navigate("/");
   }, [roomNum, navigate]);
 
   return (
@@ -20,11 +23,32 @@ const ChatRoom = ({ roomNum, chatMsg, sendMessage }) => {
           style={{ maxHeight: "100vh", overflowY: "auto" }}
         >
           <div className="mb-3">
-            {(chatMsg.length > 0 &&
-              chatMsg.map((chat, index) => <p key={index}>{chat}</p>)) || (
-              <div className="text-center text-muted">
-                No messages yet. Start chatting!
-              </div>
+            {!chatPayload || chatPayload.length === 0 ? (
+              <NoMessages hasMessage={hasMessage} />
+            ) : (
+              chatPayload?.map((payload, index) => {
+                const { senderSocketId, senderName, message, newJoin } =
+                  payload;
+
+                !hasMessage && newJoin?.socketId != socketId &&
+                (message || newJoin.msg)
+                  ? setHasMessage(true)
+                  : null;
+
+                return hasMessage ? (
+                  <Chat
+                    key={index}
+                    socketId={socketId}
+                    senderSocketId={senderSocketId}
+                    senderName={senderName}
+                    message={message}
+                    newJoin={newJoin}
+                    setHasMessage={setHasMessage}
+                  />
+                ) : (
+                  <NoMessages key={index} hasMessage={hasMessage} />
+                );
+              })
             )}
           </div>
         </div>
@@ -32,7 +56,7 @@ const ChatRoom = ({ roomNum, chatMsg, sendMessage }) => {
           onSubmit={(e) => {
             e.preventDefault();
             sendMessage(message);
-            setMessage('');
+            setMessage("");
           }}
         >
           <div className="d-flex align-items-center p-3 border-top bg-light ">
