@@ -5,6 +5,7 @@ import { Server } from "socket.io";
 
 dotenv.config();
 
+const PORT = process.env.PORT;
 const app = express();
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
@@ -27,9 +28,9 @@ io.on("connection", (socket) => {
     io.to(roomNum).emit("join-success", {
       success: true,
       newJoin: {
-        msg:`<----------- ${name} has joined the chat! ----------->`,
+        msg: `<----------- ${name} has joined the chat! ----------->`,
         socketId: socket.id,
-      }
+      },
     });
   });
 
@@ -40,7 +41,7 @@ io.on("connection", (socket) => {
       message: chatMsg,
       senderName: name,
       senderSocketId: socket.id,
-      roomNum
+      roomNum,
     });
   });
 
@@ -49,6 +50,6 @@ io.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(8001, () => {
-  console.log("Server successfully connected Port:: 8001");
+httpServer.listen(PORT, () => {
+  console.log(`Server successfully connected to Port:: ${PORT}`);
 });
