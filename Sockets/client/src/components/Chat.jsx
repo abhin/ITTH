@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function Chat({
   senderSocketId,
   socketId,
@@ -7,9 +5,10 @@ export default function Chat({
   message,
   newJoin
 }) {
+  const isChatOwner = senderSocketId === socketId || socketId == newJoin?.socketId
   return (
     <>
-      {(newJoin && socketId != newJoin?.socketId && (
+      {(newJoin && !isChatOwner && (
         <div className="d-flex justify-content-center my-2">
           <div
             className="p-2 text-center text-muted bg-info rounded-3"
@@ -22,14 +21,14 @@ export default function Chat({
         (message && (
           <div
             className={`d-flex ${
-              senderSocketId === socketId
+              isChatOwner
                 ? "justify-content-end"
                 : "justify-content-start"
             }`}
           >
             <div
               className={`p-2 my-1 rounded-3 ${
-                senderSocketId === socketId
+                isChatOwner
                   ? "bg-primary text-white"
                   : "bg-light text-dark"
               }`}

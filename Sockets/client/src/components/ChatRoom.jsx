@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import Chat from "./Chat";
 import NoMessages from "./NoMessages";
 
-const ChatRoom = ({ roomNum, chatPayload, sendMessage, socketId }) => {
+const ChatRoom = ({ roomNum, chatPayload, sendMessage, socketId, changeSiteTitle }) => {
   const [message, setMessage] = useState("");
   const [hasMessage, setHasMessage] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
+    changeSiteTitle();
     if (!roomNum) navigate("/");
   }, [roomNum, navigate]);
 
@@ -17,7 +18,9 @@ const ChatRoom = ({ roomNum, chatPayload, sendMessage, socketId }) => {
       className="d-flex justify-content-center align-items-end"
       style={{ minWidth: "100vw", minHeight: "100vh" }}
     >
+      
       <div className="container my-0" style={{ maxWidth: "1000px" }}>
+      <h1 className="text-center">Room: {roomNum}</h1>
         <div
           className="border rounded p-3 bg-white shadow-sm"
           style={{ maxHeight: "100vh", overflowY: "auto" }}

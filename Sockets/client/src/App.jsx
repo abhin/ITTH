@@ -14,6 +14,10 @@ function App() {
   const [roomNum, setRoomNum] = useState("");
   const [name, setName] = useState("");
 
+  function changeSiteTitle() {
+    document.title = `${name} - Room: ${roomNum} Chat`;
+  }
+
   function handleJoinRoom() {
     socket.emit("join-room", {
       roomNum: roomNum,
@@ -25,7 +29,7 @@ function App() {
     socket.emit("send-message", {
       chatMsg: message,
       roomNum,
-      name
+      name,
     });
   };
 
@@ -68,7 +72,15 @@ function App() {
           <Route path="join-room" element={enterRoomCmpont} />
           <Route
             path="chat-room"
-            element={<ChatRoom roomNum={roomNum} socketId={socket.id} chatPayload={chatPayload} sendMessage={sendMessage} />}
+            element={
+              <ChatRoom
+                roomNum={roomNum}
+                socketId={socket.id}
+                chatPayload={chatPayload}
+                sendMessage={sendMessage}
+                changeSiteTitle={changeSiteTitle}
+              />
+            }
           />
         </Routes>
       </div>
